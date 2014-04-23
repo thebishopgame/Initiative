@@ -1,0 +1,52 @@
+body {
+    font-family: Verdana, Arial, Sans-Serif;
+}
+
+ol {
+    list-style-type: none;
+    position: relative;
+    left: -20px;
+}
+
+ol li {
+    position: relative;
+    background: #eeeeee;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 3px;
+    padding: 0.4em;
+    font-size: 1em;
+    height: 20px;
+    width: 200px;
+    font-family: Verdana, Arial, Sans-Serif;
+    display: inline-block;
+}
+
+ol .active {
+    background: #F39814; color: white;
+}
+
+.initdex {
+    float: right;
+    position: relative;
+    top: +2px;
+    /*display: inline;*/
+}
+
+.addChar {
+    display: inline-block;
+    font-family: Verdana, Arial, Sans-Serif;
+}
+
+.input {
+    position: relative;
+    display: inline;
+    font-size: 20%;
+    top: -15px;
+    left: 25%;
+    text-align: right;
+}
+
+input[type=number] {
+    width: 30px;
+}
