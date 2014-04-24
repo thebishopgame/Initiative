@@ -1,11 +1,20 @@
 body {
     font-family: Verdana, Arial, Sans-Serif;
+    background-color: #888888;
+}
+
+#main {
+    width: 380px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 ol {
     list-style-type: none;
     position: relative;
-    left: -20px;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
 }
 
 ol li {
@@ -17,9 +26,8 @@ ol li {
     padding: 0.4em;
     font-size: 1em;
     height: 20px;
-    width: 200px;
+    width: 360px;
     font-family: Verdana, Arial, Sans-Serif;
-    display: inline-block;
 }
 
 ol .active {
@@ -33,20 +41,44 @@ ol .active {
     /*display: inline;*/
 }
 
-.addChar {
-    display: inline-block;
-    font-family: Verdana, Arial, Sans-Serif;
+.charControls {
+    float: right;
 }
 
-.input {
-    position: relative;
-    display: inline;
-    font-size: 20%;
-    top: -15px;
-    left: 25%;
-    text-align: right;
+#addChar {
+    display: inline-block;
+    font-family: Verdana, Arial, Sans-Serif;
+    background: #F0F0F0;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 3px;
+    margin-bottom: 7px;
+    padding: 0.4em;
+    font-size: 1em;
+    height: 20px;
+    width: 260px;
+}
+
+.inputLabel {
+    position: absolute;
+    font-size: 50%;
+    top: -8px;
+    margin: auto;
 }
 
 input[type=number] {
     width: 30px;
+    padding: 0;
+    margin: 0;
 }
+
+.init,.dex {
+    position: relative;
+    left: -8px;
+}
+
+/*input::-webkit-outer-spin-button,*/
+/*input::-webkit-inner-spin-button {*/
+/*    -webkit-appearance: none;*/
+/*    margin: 0;*/
+/*}*/

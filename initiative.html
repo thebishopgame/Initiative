@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang=en>
     <head>
         <title>thebishopgame's Initiative Tracker</title>
         <link rel='stylesheet' type='text/css' href='css/initiative.css'/>
@@ -9,13 +9,16 @@
         <script type='text/javascript' src='initiative.js'></script>
     </head>
     <body>
-        <form id='addChar'><input type='text' name=charName>
+        <div id='main'>
+        <div id='addChar'>Name:<input type='text' name=charName>
         <button id='addButton'>Add</button>
-        </form>
+        </div>
         <ol id='charList'>
         </ol>
+        <button id='sortInit'>Sort</button>&nbsp&nbsp&nbsp
         <button id='start'>Start</button>
-        <button id='stop'>Stop</button>
-        <button id='sortInit'>Sort</button>
+        <button class=inInit id='next'>Next</button>
+        <button class=inInit id='stop'>Stop</button>
+        </div>
     </body>
 </html>

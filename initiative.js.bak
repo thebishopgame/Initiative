@@ -34,19 +34,17 @@ function addChar(char, index)
 {
     $('#charList').append
     (
-        "<li id=" + char.name + ">" + char.name + " " +
-        "<div class=charControls>" +
-        "<button class=up id=" + index + ">Up</button>" +
+        "<div class=charEntry' id=" + index +"><li id=" + char.name + ">" + char.name + " " +
+        "<div class='initdex'>" +
+        "<label class=input>Init</label>" +
+        "<input type=number class=init id=" + index + " value=" + char.init + ">" +
+        "<label class=input>Dex</label>" +
+        "<input type=number class=dex id=" + index + " value=" + char.dex + ">" +
+        "</div></li>" +
+        " <button class=up id=" + index + ">Up</button>" +
         "<button class=down id=" + index + ">Down</button>" +
         "<button class=hold id=" + index + ">Hold</button>" +
-        "<button class=delete id=" + index + ">Delete</button></div>" +
-        "</div>" +
-        "<div class='initdex'>" +
-        "<label class=inputLabel>Init</label>" +
-        "<input type=number maxlength='2' min='0' max='99' class=init id=" + index + " value=" + char.init + ">" +
-        "<label class=inputLabel>Dex</label>" +
-        "<input type=number maxlength='2' min='0' max='99' class=dex id=" + index + " value=" + char.dex + ">" +
-        "</li>"
+        "<button class=delete id=" + index + ">Delete</button></div>"
     )
 }
 
@@ -188,15 +186,13 @@ $(document).ready(function()
 
 $(document).on('change', '.init', function()
 {
-    if(this.value.length > 1)
-        this.value = (this.value).slice(0,2);
     initQueue[parseInt(this.id)].init = parseInt(this.value);
     saveState();
 });
 
 $(document).on('change', '.dex', function()
 {
-    initQueue[parseInt(this.id)].dex = parseInt(this.value);
+    initQueue[this.id].dex = parseInt(this.value);
     saveState();
 });
 
@@ -219,11 +215,10 @@ $(document).on('click', '.delete', function() {
 });
 
 $(document).on('click', '.hold', function() {
-    var id = parseInt(this.id);
     if(inInit)
     {
-        var char = initQueue[id];
-        initQueue.splice(id, 1);
+        var char = initQueue[parseInt(this.id)];
+        initQueue.splice(parseInt(this.id), 1);
         initQueue.push(char);
         repopulate();
         makeActive(active);
