@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <title>thebishopgame's Initiative Tracker</title>
+        <link rel='stylesheet' type='text/css' href='css/initiative.css'/>
+        <script src="dep/jquery-1.11.0.min.js"></script>
+        <script src="dep/jquery-ui-1.10.4.min.js"></script>
+        <script type='text/javascript' src='initiative.js'></script>
+    </head>
+    <body>
+        <div id='main'>
+        <div id='title'>INITIATIVE</div>
+        <div id='spacer'></div>
+        <div id='addChar'>Name:<input type='text' name=charName>
+        <button id='addButton'>Add</button>
+        </div>
+        <div id=queue>
+        <ol id='charList'>
+        </ol>
+        <button id='sortInit'>Sort</button>&nbsp&nbsp&nbsp
+        <button id='start'>Start</button>
+        <button class=inInit id='next'>Next</button>
+        <button class=inInit id='stop'>Stop</button>
+        </div>
+        <div id='directions'>
+        <ul id='dirlist'>
+        <li>Enter names for all entities in initiative.
+        <li>Set their initiative and dexterity scores
+        <li>Hit 'Sort'
+        <li>Hit 'Start' or spacebar to begin counting initiative
+        <li>Use 'Next' or spacebar to iterate
+        <li>Use 'Up' and 'Down' to change order
+        <li>Use 'Hold' to drop someone to the end of the queue (hold their turn)
+        <li>Hit 'Stop' or esc to exit initiative. Sorting will also end Initiative
+        </ul>
+        </div>
+        </div>
+    </body>
+</html>

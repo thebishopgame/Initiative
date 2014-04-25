@@ -30,7 +30,7 @@ function compareInit(a,b)
     return 0;
 }
 
-function addChar(char, index)
+function addCharToList(char, index)
 {
     $('#charList').append
     (
@@ -48,6 +48,23 @@ function addChar(char, index)
         "<input type=number maxlength='2' min='0' max='99' class=dex id=" + index + " value=" + char.dex + ">" +
         "</li>"
     )
+}
+
+function addChar()
+{
+    initQueue.push(new character($('input[name=charName]').val()));
+    addCharToList(initQueue[initQueue.length-1], initQueue.length-1);
+    $('input[name=charName]').val('');
+    
+    if (initQueue.length > 1)
+    {
+        if (!inInit)
+            $('#start').attr('disabled', false);
+        
+        $('#sortInit').attr('disabled', false);
+    }
+    
+    saveState();
 }
 
 function makeInactive(index)
@@ -74,7 +91,7 @@ function repopulate()
     $('#charList').empty();
     for(var i = 0; i < initQueue.length; i++)
     {
-        addChar(initQueue[i],i);
+        addCharToList(initQueue[i],i);
     }
 }
 
@@ -87,12 +104,15 @@ function setInInit(state)
     if(inInit != state)    
     {
         inInit = state;
-        if(state)
-            makeActive(active);
-        else
+        if (initQueue.length > 1)
         {
-            makeInactive(active);
-            active = 0;
+            if(state)
+                makeActive(active);
+            else
+            {
+                makeInactive(active);
+                active = 0;
+            }
         }
     }
 }
@@ -101,31 +121,37 @@ $(document).ready(function()
 {
     if(localStorage.getItem('active') !== null)
         active = JSON.parse(localStorage.active);
+    
     if(localStorage.getItem('initQueue') !== null)
     {
         initQueue = JSON.parse(localStorage.initQueue);
         repopulate();
     }
+    
     if(localStorage.getItem('inInit') !== null)
         setInInit(JSON.parse(localStorage.inInit));
+    else
+    {
+        setInInit(inInit);
+    }
+    
+    if (initQueue.length < 2)
+    {
+        $('#start').attr('disabled', true);
+        $('#sortInit').attr('disabled', true);
+    }
     
     $('input[name=charName]').keydown(function(key) 
     {
         if(parseInt(key.which) == 13) 
         {
-            initQueue.push(new character($('input[name=charName]').val()));
-            addChar(initQueue[initQueue.length-1], initQueue.length-1);
-            $(this).val('');
-            saveState();
+            addChar();
             return false;
         }
     });
     
     $('#addButton').click(function() {
-        initQueue.push(new character($('input[name=charName]').val()));
-        addChar(initQueue[initQueue.length-1], initQueue.length-1);
-        $('input[name=charName]').val('');
-        saveState();
+        addChar();
         return false;
     });
     
@@ -177,7 +203,8 @@ $(document).ready(function()
                 }
                 else
                 {
-                    setInInit(true);
+                    if (initQueue.length > 1)
+                        setInInit(true);
                 }
                 
                 saveState();
@@ -208,7 +235,14 @@ $(document).on('click', '.delete', function() {
     initQueue.splice(id, 1);
     repopulate();
     
-    if(inInit)
+    if(initQueue.length < 2)
+    {
+        setInInit(false);
+        $('#start').attr('disabled', true);
+        $('#sortInit').attr('disabled', true);
+        active = 0;
+    }
+    else if(inInit)
     {
         if (active > initQueue.length-1)
             active = 0;
@@ -275,4 +309,3 @@ $(document).on('click', '.down', function() {
     
     $(this).blur();
 });
-
