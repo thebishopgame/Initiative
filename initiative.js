@@ -1,4 +1,5 @@
 var initQueue = [];
+var outQueue = [];
 var active = 0;
 var inInit = false;
 var focus = 0;
@@ -41,13 +42,33 @@ function addCharToList(char, index)
         "<button class='control down' id=" + index + "><img class=controlimg src=img/downarrow.png height=30 width=30></button>" +
         "<button class='control hold' id=" + index + "><img class=controlimg src=img/holdclock.png></button>" +
         "<button class='control delete' id=" + index + "><img class=controlimg src=img/redx.png></button>" +
-        "<button class='control pause' id=" + index + "><img class=controlimg src=img/pause.png></button></div>" +
+        "<button class='control pause' id=" + index + "><img class=controlimg src=img/pause.png></button>" +
         "</div>" +
         "<div class='initdex'>" +
         "<label class=inputLabel>Init</label>" +
         "<input type=number maxlength='2' min='0' max='99' class=init id=" + index + " value=" + char.init + ">" +
         "<label class=inputLabel>Dex</label>" +
         "<input type=number maxlength='2' min='0' max='99' class=dex id=" + index + " value=" + char.dex + ">" +
+        "</div>" + 
+        "</li>"
+    )
+}
+
+function addCharToOut(char, index)
+{
+    $('#outList').append
+    (
+        "<li id=" + char.name + ">" + char.name + " " +
+        "<div class=charControls>" +
+        "<button class='control play' id=" + index + "><img class=controlimg src=img/play.png></button>" +
+        "<button class='control outdelete' id=" + index + "><img class=controlimg src=img/redx.png></button>" +
+        "</div>" +
+        "<div class='initdex'>" +
+        "<label class=inputLabel>Init</label>" +
+        "<input type=number maxlength='2' min='0' max='99' class=init id=" + index + " value=" + char.init + ">" +
+        "<label class=inputLabel>Dex</label>" +
+        "<input type=number maxlength='2' min='0' max='99' class=dex id=" + index + " value=" + char.dex + ">" +
+        "</div>" + 
         "</li>"
     )
 }
@@ -60,9 +81,6 @@ function addChar()
     
     if (initQueue.length > 1)
     {
-        if (!inInit)
-            $('#start').attr('disabled', false);
-        
         $('#sortInit').attr('disabled', false);
     }
     
@@ -71,21 +89,28 @@ function addChar()
 
 function makeInactive(index)
 {
-    $('#' + initQueue[index].name).animate({left: "-=10px"}, 100, function() {
-        $('#' + initQueue[index].name).css({left: 0});
-    });
-    $('#' + initQueue[index].name).removeClass('active');
+    var active = $('#' + initQueue[index].name);
+    
+    if(active.hasClass('active'))
+    {
+        active.removeClass('active');
+    }
 }
 
 function makeActive(index)
 {
-    $('#' + initQueue[index].name).animate({left: "+=10px"}, 100);
-    $('#' + initQueue[index].name).addClass('active');
+    var active = $('#' + initQueue[index].name);
+    
+    if(!active.hasClass('active'))
+    {
+        active.addClass('active');
+    }
 }
 
 function saveState()
 {
     localStorage.initQueue = JSON.stringify(initQueue);
+    localStorage.outQueue = JSON.stringify(outQueue);
     localStorage.active = JSON.stringify(active);
     localStorage.inInit = JSON.stringify(inInit);
 }
@@ -99,10 +124,31 @@ function repopulate()
     }
 }
 
+function repopulateOut()
+{
+    if (outList.length > 0)
+    {
+        $('#outList').empty();
+        $('#outQueue').show();
+        for (var i = 0; i < outQueue.length; i++)
+        {
+            addCharToOut(outQueue[i], i);
+        }
+    }
+    else {
+        $('#outList').empty();
+        $('#outQueue').hide();
+    }
+}
+
 function setInInit(state)
 {
-    $('#start').attr('disabled', state);
+    if(state)
+        $('#start').html("Stop");
+    else
+        $('#start').html("Start");
     $('.inInit').attr('disabled', !state);
+    $('input[name=charName]').blur();
     
     if(inInit != state)    
     {
@@ -128,7 +174,20 @@ $(document).ready(function()
     if(localStorage.getItem('initQueue') !== null)
     {
         initQueue = JSON.parse(localStorage.initQueue);
-        repopulate();
+        if(initQueue.length > 0)
+            repopulate();
+    }
+    
+    if(localStorage.getItem('outQueue') !== null)
+    {
+        outQueue = JSON.parse(localStorage.outQueue);
+        
+        if (outQueue.length > 0)
+        {
+            repopulateOut();
+        }
+        else
+            $('#outQueue').css('display', 'none');
     }
     
     if(localStorage.getItem('inInit') !== null)
@@ -140,7 +199,7 @@ $(document).ready(function()
     
     if (initQueue.length < 2)
     {
-        $('#start').attr('disabled', true);
+        $('#start').html("Start");
         $('#sortInit').attr('disabled', true);
     }
     
@@ -162,19 +221,19 @@ $(document).ready(function()
         setInInit(false);
         initQueue.sort(compareInit);
         repopulate();
-        $('#start').attr('disabled', false);
+        $('#start').html("Start");
         $(this).blur();
         saveState();
     });
 
     $('#start').click(function() {
-        setInInit(true);
+        if (inInit)
+            setInInit(false);
+        else
+            setInInit(true);
         saveState();
-    });
-
-    $('#stop').click(function() {
-        setInInit(false);
-        saveState();
+        
+        $(this).blur();
     });
 
     $('#next').click(function() {
@@ -192,7 +251,7 @@ $(document).ready(function()
     $(document).keydown(function(key) {
         switch(parseInt(key.keyCode)) {
             case 9:
-                $('.delete[id=' + String(focus) + ']').focus(); //wtf? offset by 1 for some reason
+                $('.pause[id=' + String(focus) + ']').focus(); //wtf? offset by 1 for some reason
                 focus++;
                 if(focus > initQueue.length-1)
                     focus = 0;
@@ -254,7 +313,99 @@ $(document).on('click', '.delete', function()
         if(initQueue.length < 2)
         {
             setInInit(false);
-            $('#start').attr('disabled', true);
+            $('#start').html('Start');
+            $('#sortInit').attr('disabled', true);
+            active = 0;
+        }
+        else if(inInit)
+        {
+            if (active > initQueue.length-1)
+                active = 0;
+            makeActive(active);
+        }
+        
+        $(this).remove()
+       
+        saveState();
+    });
+    
+    saveState();
+});
+
+$(document).on('click', '.outdelete', function() 
+{
+    var id = parseInt(this.id);
+
+    $(this).parent().parent().fadeOut(100, function() {
+        outQueue.splice(id, 1);
+
+        if (outQueue.length > 0)
+        {
+            for (var i = id; i < outQueue.length; i++)
+            {
+                $('li[id=' + outQueue[i].name + ']').find('*').attr('id', i);
+            }
+        }
+        else
+        {
+            $('#outQueue').hide();
+        }
+       
+        $(this).remove();
+        
+        saveState();
+    });
+    
+    saveState();
+});
+
+$(document).on('click', '.play', function() 
+{
+    var id = parseInt(this.id);
+
+    $(this).parent().parent().fadeOut(100, function() {
+        initQueue.push((outQueue.splice(id, 1))[0]);
+
+        if (outQueue.length > 0)
+        {
+            for (var i = id; i < outQueue.length; i++)
+            {
+                $('li[id=' + outQueue[i].name + ']').find('*').attr('id', i);
+            }
+        }
+        else
+        {
+            $('#outQueue').hide();
+        }
+       
+        $(this).remove();
+        
+        addCharToList(initQueue[initQueue.length-1], initQueue.length-1);
+        
+        saveState();
+    });
+    
+    saveState();
+});
+
+$(document).on('click', '.pause', function() 
+{
+    var id = parseInt(this.id);
+    if(inInit && (id == active))
+        makeInactive(id);
+
+    $(this).parent().parent().fadeOut(100, function() {
+        outQueue.push((initQueue.splice(id, 1))[0]);
+        
+        for (var i = id; i < initQueue.length; i++)
+        {
+            $('li[id=' + initQueue[i].name + ']').find('*').attr('id', i);
+        }
+        
+        if(initQueue.length < 2)
+        {
+            setInInit(false);
+            $('#start').html('Start');
             $('#sortInit').attr('disabled', true);
             active = 0;
         }
@@ -264,7 +415,12 @@ $(document).on('click', '.delete', function()
                 active = 0;
             makeActive(active);
         } 
-       
+        
+        $('#outQueue').show();
+        addCharToOut(outQueue[outQueue.length-1], outQueue.length-1);
+        
+        $(this).remove();
+        
         saveState();
     });
     
@@ -316,26 +472,30 @@ $(document).on('click', '.up', function()
         var sel = $(this).parent().parent();
         var prev = sel.prev();
         
-        sel.fadeOut(100, function() {
-            prev.before(sel);
-            if(inInit && (id == active || id-1 == active))
-                makeActive(active);
-            sel.fadeIn(150);
-        });
-        
-        prev.fadeOut(100, function() {
-            prev.fadeIn(150);
-        });
-        
         if(inInit && (id == active || id-1 == active))
             makeInactive(active);
         
-        sel.find('*').attr('id', id-1);
-        prev.find('*').attr('id', id);
+        sel.fadeOut(100, function() {
+            prev.before(sel);
+            
+            sel.find('*').attr('id', id-1);
+            prev.find('*').attr('id', id);
+            
+            var char = initQueue[id];
+            initQueue[id] = initQueue[id-1];
+            initQueue[id-1] = char;
+            
+            sel.fadeIn(150);
+            
+            prev.stop(true,true).fadeIn(150, function() {
+                if(inInit && (id == active || id-1 == active))
+                    makeActive(active);
+            });
+            
+            saveState();
+        });
         
-        var char = initQueue[id];
-        initQueue[id] = initQueue[id-1];
-        initQueue[id-1] = char;
+        prev.fadeOut(100)
     }
     
     saveState();
@@ -351,27 +511,31 @@ $(document).on('click', '.down', function()
         var sel = $(this).parent().parent();
         var next = sel.next();
         
-        sel.fadeOut(100, function() {
-            next.after(sel);
-            if(inInit && (id == active || id+1 == active))
-                makeActive(active);
-            sel.fadeIn(150);
-        });
-        
-        next.fadeOut(100, function() {
-            next.fadeIn(150);
-        });
-        
         if(inInit && (id == active || id+1 == active))
             makeInactive(active);
+        
+        sel.fadeOut(100, function() {
+            next.after(sel);
             
-        sel.find('*').attr('id', id+1);
-        next.find('*').attr('id', id);
+            sel.find('*').attr('id', id+1);
+            next.find('*').attr('id', id);
+            
+            var char = initQueue[id];
+            initQueue[id] = initQueue[id+1];
+            initQueue[id+1] = char;
+            
+            sel.fadeIn(150);
+            
+            next.stop(true,true).fadeIn(150, function() {
+                if(inInit && (id == active || id+1 == active)) {
+                    makeActive(active);
+                }    
+            });
+            
+            saveState();
+        });
         
-        var char = initQueue[id];
-        initQueue[id] = initQueue[id+1];
-        initQueue[id+1] = char;
-        
+        next.fadeOut(100);
     }
     
     saveState();
@@ -386,19 +550,25 @@ $(document).on('click', '#reset', function()
         initQueue[i].init = 10;
         $('.init[id=' + String(i) + ']').val(10);
     }
+    if (inInit)
+        makeInactive(active);
     active = 0;
-    
+    setInInit(false);
     saveState();
+    $(this).blur();
 })
 
 $(document).on('click', '#clear', function() 
 {
     active = 0;
     initQueue = [];
+    outQueue = [];
     repopulate();
+    repopulateOut();
     setInInit(false);
-    $('#start').attr('disabled', true);
     $('#sortInit').attr('disabled', true);
     
     saveState();
+    
+    $(this).blur();
 })
