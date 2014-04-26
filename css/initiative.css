@@ -5,7 +5,7 @@ body {
 }
 
 #main {
-    width: 740px;
+    width: 780px;
     margin: 0 auto;
     text-align: center;
 }
@@ -27,7 +27,7 @@ ol li {
     margin-top: 3px;
     margin-bottom: 3px;
     padding: 0.25em;
-    width: 600px;
+    width: 640px;
     /*height: 30px;*/
     font-family: Verdana, Arial, Sans-Serif;
     vertical-align: middle;
@@ -42,6 +42,11 @@ button {
     vertical-align: middle;
     position: relative;
     top: -4px;
+    -webkit-appearance: square-button;
+    -moz-appearance: none;
+    border-radius: 0;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+    background: -moz-linear-gradient(top,  #fff,  #ededed);
 }
 
 .initdex {
@@ -106,7 +111,7 @@ input[type=text] {
     border: 2px solid black;
     margin: 6px;
     padding: 20px;
-    width: 640px;
+    width: 680px;
 }
 
 #directions {
@@ -142,11 +147,20 @@ input[type=text] {
     height: 1em;
 }
 
-.control {
+.controlimg {
     width: 30px;
     height: 30px;
     position: relative;
     top: 2px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.control {
+    width: 46px;
+    height: 42px;
+    margin: 1px;
+    padding: 0;
 }
 
 .dirimg {

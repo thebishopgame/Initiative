@@ -37,11 +37,11 @@ function addCharToList(char, index)
     (
         "<li id=" + char.name + ">" + char.name + " " +
         "<div class=charControls>" +
-        "<button class=up id=" + index + "><img class=control src=img/uparrow.png></button>" +
-        "<button class=down id=" + index + "><img class=control src=img/downarrow.png height=30 width=30></button>" +
-        "<button class=hold id=" + index + "><img class=control src=img/holdclock.png></button>" +
-        "<button class=delete id=" + index + "><img class=control src=img/redx.png></button>" +
-        "<button class=pause id=" + index + "><img class=control src=img/pause.png></button></div>" +
+        "<button class='control up' id=" + index + "><img class=controlimg src=img/uparrow.png></button>" +
+        "<button class='control down' id=" + index + "><img class=controlimg src=img/downarrow.png height=30 width=30></button>" +
+        "<button class='control hold' id=" + index + "><img class=controlimg src=img/holdclock.png></button>" +
+        "<button class='control delete' id=" + index + "><img class=controlimg src=img/redx.png></button>" +
+        "<button class='control pause' id=" + index + "><img class=controlimg src=img/pause.png></button></div>" +
         "</div>" +
         "<div class='initdex'>" +
         "<label class=inputLabel>Init</label>" +
@@ -237,7 +237,7 @@ $(document).on('change', '.dex', function()
 
 $(document).on('click', '.delete', function() 
 {
-    var id = parseInt(id);
+    var id = parseInt(this.id);
     if(inInit && (id == active))
         makeInactive(id);
     
@@ -264,21 +264,21 @@ $(document).on('click', '.delete', function()
 $(document).on('click', '.hold', function() 
 {
     var id = parseInt(this.id);
-    if(inInit && id < (initQueue.length-1))
+    if(id < (initQueue.length-1))
     {
         var sel = $(this).parent().parent();
         var last = $('li[id=' + initQueue[initQueue.length-1].name + "]");
         
         sel.css({'z-index': 1});
         
-        sel.animate({top: last.position().top - sel.position().top}, 100, function() {
+        sel.fadeOut(150, function() {
             last.after(sel);
-            $(this).css({top: 0, 'z-index': 0});
             if(inInit && id == active)
                 makeActive(active);
+            sel.fadeIn(150);
         });
         
-        if(id == active)
+        if(inInit && id == active)
             makeInactive(active);
         else if (id < active)
             active--;
@@ -306,15 +306,15 @@ $(document).on('click', '.up', function()
         var sel = $(this).parent().parent();
         var prev = sel.prev();
         
-        sel.animate({top: -($(this).height() * 2)}, 100, function() {
+        sel.fadeOut(100, function() {
             prev.before(sel);
-            $(this).css({top: 0});
             if(inInit && (id == active || id-1 == active))
                 makeActive(active);
+            sel.fadeIn(150);
         });
         
-        prev.animate({top: ($(this).height() * 2)}, 100, function() {
-            $(this).css({top: 0});
+        prev.fadeOut(100, function() {
+            prev.fadeIn(150);
         });
         
         if(inInit && (id == active || id-1 == active))
@@ -341,15 +341,15 @@ $(document).on('click', '.down', function()
         var sel = $(this).parent().parent();
         var next = sel.next();
         
-        sel.animate({top: ($(this).height() * 2)}, 100, function() {
+        sel.fadeOut(100, function() {
             next.after(sel);
-            $(this).css({top: 0});
             if(inInit && (id == active || id+1 == active))
                 makeActive(active);
+            sel.fadeIn(150);
         });
         
-        next.animate({top: -($(this).height() * 2)}, 100, function() {
-            $(this).css({top: 0});
+        next.fadeOut(100, function() {
+            next.fadeIn(150);
         });
         
         if(inInit && (id == active || id+1 == active))
