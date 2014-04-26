@@ -173,8 +173,19 @@ input[type=text] {
 #initControl {
     position: relative;
     top: 7px;
+    vertical-align: middle;
+}
+
+.initControl {
+    height: 35px;
+    margin: 0 auto;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 #start {
     width: 63px;
+    /*height: 33px;*/
+    /*margin: 0 auto;*/
+    /*padding: 0;*/
 }

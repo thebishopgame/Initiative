@@ -147,7 +147,7 @@ function setInInit(state)
         $('#start').html("Stop");
     else
         $('#start').html("Start");
-    $('.inInit').attr('disabled', !state);
+    $('#next').attr('disabled', !state);
     $('input[name=charName]').blur();
     
     if(inInit != state)    
