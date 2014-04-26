@@ -71,7 +71,9 @@ function addChar()
 
 function makeInactive(index)
 {
-    $('#' + initQueue[index].name).animate({left: "-=10px"}, 100);
+    $('#' + initQueue[index].name).animate({left: "-=10px"}, 100, function() {
+        $('#' + initQueue[index].name).css({left: 0});
+    });
     $('#' + initQueue[index].name).removeClass('active');
 }
 
@@ -240,23 +242,31 @@ $(document).on('click', '.delete', function()
     var id = parseInt(this.id);
     if(inInit && (id == active))
         makeInactive(id);
-    
-    initQueue.splice(id, 1);
-    repopulate();
-    
-    if(initQueue.length < 2)
-    {
-        setInInit(false);
-        $('#start').attr('disabled', true);
-        $('#sortInit').attr('disabled', true);
-        active = 0;
-    }
-    else if(inInit)
-    {
-        if (active > initQueue.length-1)
+
+    $(this).parent().parent().fadeOut(100, function() {
+        initQueue.splice(id, 1);
+        
+        for (var i = id; i < initQueue.length; i++)
+        {
+            $('li[id=' + initQueue[i].name + ']').find('*').attr('id', i);
+        }
+        
+        if(initQueue.length < 2)
+        {
+            setInInit(false);
+            $('#start').attr('disabled', true);
+            $('#sortInit').attr('disabled', true);
             active = 0;
-        makeActive(active);
-    }
+        }
+        else if(inInit)
+        {
+            if (active > initQueue.length-1)
+                active = 0;
+            makeActive(active);
+        } 
+       
+        saveState();
+    });
     
     saveState();
 });
