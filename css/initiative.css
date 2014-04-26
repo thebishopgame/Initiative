@@ -5,7 +5,7 @@ body {
 }
 
 #main {
-    width: 760px;
+    width: 740px;
     margin: 0 auto;
     text-align: center;
 }
@@ -27,7 +27,7 @@ ol li {
     margin-top: 3px;
     margin-bottom: 3px;
     padding: 0.25em;
-    width: 640px;
+    width: 600px;
     /*height: 30px;*/
     font-family: Verdana, Arial, Sans-Serif;
     vertical-align: middle;
@@ -41,7 +41,7 @@ button {
     font-size: .65em;
     vertical-align: middle;
     position: relative;
-    top: -2px;
+    top: -4px;
 }
 
 .initdex {
@@ -90,11 +90,6 @@ input[type=text] {
     vertical-align: middle;
     position: relative;
     top: -2px;
-    text-transform: capitalize;
-}
-
-input[name=charName] {
-    text-transform: capitalize;
 }
 
 .init,.dex {
@@ -111,7 +106,7 @@ input[name=charName] {
     border: 2px solid black;
     margin: 6px;
     padding: 20px;
-    width: 680px;
+    width: 640px;
 }
 
 #directions {
@@ -145,4 +140,23 @@ input[name=charName] {
 
 #spacer {
     height: 1em;
+}
+
+.control {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 2px;
+}
+
+.dirimg {
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 2px;
+}
+
+#initControl {
+    position: relative;
+    top: 7px;
 }

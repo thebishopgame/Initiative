@@ -1,6 +1,7 @@
 var initQueue = [];
 var active = 0;
 var inInit = false;
+var focus = 0;
 
 function character(name, init, dex) 
 {
@@ -36,10 +37,11 @@ function addCharToList(char, index)
     (
         "<li id=" + char.name + ">" + char.name + " " +
         "<div class=charControls>" +
-        "<button class=up id=" + index + ">Up</button>" +
-        "<button class=down id=" + index + ">Down</button>" +
-        "<button class=hold id=" + index + ">Hold</button>" +
-        "<button class=delete id=" + index + ">Delete</button></div>" +
+        "<button class=up id=" + index + "><img class=control src=img/uparrow.png></button>" +
+        "<button class=down id=" + index + "><img class=control src=img/downarrow.png height=30 width=30></button>" +
+        "<button class=hold id=" + index + "><img class=control src=img/holdclock.png></button>" +
+        "<button class=delete id=" + index + "><img class=control src=img/redx.png></button>" +
+        "<button class=pause id=" + index + "><img class=control src=img/pause.png></button></div>" +
         "</div>" +
         "<div class='initdex'>" +
         "<label class=inputLabel>Init</label>" +
@@ -69,13 +71,13 @@ function addChar()
 
 function makeInactive(index)
 {
-    $('#' + initQueue[index].name).animate({left: "-=10px"}, 'fast');
+    $('#' + initQueue[index].name).animate({left: "-=10px"}, 100);
     $('#' + initQueue[index].name).removeClass('active');
 }
 
 function makeActive(index)
 {
-    $('#' + initQueue[index].name).animate({left: "+=10px"}, 'fast');
+    $('#' + initQueue[index].name).animate({left: "+=10px"}, 100);
     $('#' + initQueue[index].name).addClass('active');
 }
 
@@ -99,7 +101,6 @@ function setInInit(state)
 {
     $('#start').attr('disabled', state);
     $('.inInit').attr('disabled', !state);
-    $('.hold').attr('disabled', !state);
     
     if(inInit != state)    
     {
@@ -188,6 +189,13 @@ $(document).ready(function()
     
     $(document).keydown(function(key) {
         switch(parseInt(key.keyCode)) {
+            case 9:
+                $('.delete[id=' + String(focus) + ']').focus(); //wtf? offset by 1 for some reason
+                focus++;
+                if(focus > initQueue.length-1)
+                    focus = 0;
+                break;
+            
             case 27:
                 setInInit(false);
                 saveState();
@@ -227,7 +235,8 @@ $(document).on('change', '.dex', function()
     saveState();
 });
 
-$(document).on('click', '.delete', function() {
+$(document).on('click', '.delete', function() 
+{
     var id = parseInt(id);
     if(inInit && (id == active))
         makeInactive(id);
@@ -252,35 +261,35 @@ $(document).on('click', '.delete', function() {
     saveState();
 });
 
-$(document).on('click', '.hold', function() {
+$(document).on('click', '.hold', function() 
+{
     var id = parseInt(this.id);
-    if(inInit)
+    if(inInit && id < (initQueue.length-1))
     {
+        var sel = $(this).parent().parent();
+        var last = $('li[id=' + initQueue[initQueue.length-1].name + "]");
+        
+        sel.css({'z-index': 1});
+        
+        sel.animate({top: last.position().top - sel.position().top}, 100, function() {
+            last.after(sel);
+            $(this).css({top: 0, 'z-index': 0});
+            if(inInit && id == active)
+                makeActive(active);
+        });
+        
+        if(id == active)
+            makeInactive(active);
+        else if (id < active)
+            active--;
+         
         var char = initQueue[id];
         initQueue.splice(id, 1);
         initQueue.push(char);
-        repopulate();
-        makeActive(active);
-    }
-    
-    saveState();
-    
-    $(this).blur();
-});
 
-$(document).on('click', '.up', function() {
-    var id = parseInt(this.id);
-    if (parseInt(id) > 0)
-    {
-        var char = initQueue[id];
-        initQueue[id] = initQueue[id-1];
-        initQueue[id-1] = char;
-        
-        repopulate();
-        
-        if(inInit)
+        for (var i = id; i < initQueue.length; i++)
         {
-            makeActive(active);
+            $('li[id=' + initQueue[i].name + ']').find('*').attr('id', i);
         }
     }
     
@@ -289,23 +298,97 @@ $(document).on('click', '.up', function() {
     $(this).blur();
 });
 
-$(document).on('click', '.down', function() {
+$(document).on('click', '.up', function() 
+{
+    var id = parseInt(this.id);
+    if (id > 0)
+    {
+        var sel = $(this).parent().parent();
+        var prev = sel.prev();
+        
+        sel.animate({top: -($(this).height() * 2)}, 100, function() {
+            prev.before(sel);
+            $(this).css({top: 0});
+            if(inInit && (id == active || id-1 == active))
+                makeActive(active);
+        });
+        
+        prev.animate({top: ($(this).height() * 2)}, 100, function() {
+            $(this).css({top: 0});
+        });
+        
+        if(inInit && (id == active || id-1 == active))
+            makeInactive(active);
+        
+        sel.find('*').attr('id', id-1);
+        prev.find('*').attr('id', id);
+        
+        var char = initQueue[id];
+        initQueue[id] = initQueue[id-1];
+        initQueue[id-1] = char;
+    }
+    
+    saveState();
+    
+    $(this).blur();
+});
+
+$(document).on('click', '.down', function() 
+{
     var id = parseInt(this.id);
     if (id < (initQueue.length-1))
     {
+        var sel = $(this).parent().parent();
+        var next = sel.next();
+        
+        sel.animate({top: ($(this).height() * 2)}, 100, function() {
+            next.after(sel);
+            $(this).css({top: 0});
+            if(inInit && (id == active || id+1 == active))
+                makeActive(active);
+        });
+        
+        next.animate({top: -($(this).height() * 2)}, 100, function() {
+            $(this).css({top: 0});
+        });
+        
+        if(inInit && (id == active || id+1 == active))
+            makeInactive(active);
+            
+        sel.find('*').attr('id', id+1);
+        next.find('*').attr('id', id);
+        
         var char = initQueue[id];
         initQueue[id] = initQueue[id+1];
         initQueue[id+1] = char;
         
-        repopulate();
-        
-        if(inInit)
-        {
-            makeActive(active);
-        }
     }
     
     saveState();
     
     $(this).blur();
 });
+
+$(document).on('click', '#reset', function() 
+{
+    for (var i=0; i < initQueue.length; i++)
+    {
+        initQueue[i].init = 10;
+        $('.init[id=' + String(i) + ']').val(10);
+    }
+    active = 0;
+    
+    saveState();
+})
+
+$(document).on('click', '#clear', function() 
+{
+    active = 0;
+    initQueue = [];
+    repopulate();
+    setInInit(false);
+    $('#start').attr('disabled', true);
+    $('#sortInit').attr('disabled', true);
+    
+    saveState();
+})
