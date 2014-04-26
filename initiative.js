@@ -207,13 +207,15 @@ $(document).ready(function()
     {
         if(parseInt(key.which) == 13) 
         {
-            addChar();
+            if ($('input[name=charName]').val() != "")
+                addChar();
             return false;
         }
     });
     
     $('#addButton').click(function() {
-        addChar();
+        if ($('input[name=charName]').val() != "")
+            addChar();
         return false;
     });
     
