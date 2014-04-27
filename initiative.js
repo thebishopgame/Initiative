@@ -189,6 +189,8 @@ $(document).ready(function()
         else
             $('#outQueue').css('display', 'none');
     }
+    else
+        $('#outQueue').css('display', 'none');
     
     if(localStorage.getItem('inInit') !== null)
         setInInit(JSON.parse(localStorage.inInit));
