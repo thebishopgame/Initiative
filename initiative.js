@@ -75,15 +75,30 @@ function addCharToOut(char, index)
 
 function addChar()
 {
-    initQueue.push(new character($('input[name=charName]').val()));
-    addCharToList(initQueue[initQueue.length-1], initQueue.length-1);
-    $('input[name=charName]').val('');
+    var inputName = $('input[name=charName]').val();
+    var canAdd = true;
     
-    if (initQueue.length > 1)
-    {
-        $('#sortInit').attr('disabled', false);
+    if (inputName !== "")
+    {    
+        for(var i = 0; i < initQueue.length; i++)
+        {
+            if (inputName == initQueue[i].name)
+                canAdd = false;
+        }
+        
+        if (canAdd)
+        {
+            initQueue.push(new character($('input[name=charName]').val()));
+            addCharToList(initQueue[initQueue.length-1], initQueue.length-1);
+            
+            if (initQueue.length > 1)
+            {
+                $('#sortInit').attr('disabled', false);
+            }
+        }
     }
     
+    $('input[name=charName]').val('');
     saveState();
 }
 
@@ -209,15 +224,13 @@ $(document).ready(function()
     {
         if(parseInt(key.which) == 13) 
         {
-            if ($('input[name=charName]').val() != "")
-                addChar();
+            addChar();
             return false;
         }
     });
     
     $('#addButton').click(function() {
-        if ($('input[name=charName]').val() != "")
-            addChar();
+        addChar();
         return false;
     });
     
