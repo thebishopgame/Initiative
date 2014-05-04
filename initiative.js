@@ -141,7 +141,7 @@ function repopulate()
 
 function repopulateOut()
 {
-    if (outList.length > 0)
+    if (outQueue.length > 0)
     {
         $('#outList').empty();
         $('#outQueue').show();
@@ -294,6 +294,7 @@ $(document).ready(function()
                 }
                 
                 saveState();
+                return false;
                 break;
         }
     });
