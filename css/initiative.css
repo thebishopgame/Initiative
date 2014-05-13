@@ -4,7 +4,7 @@ body {
     font-size: 2em;
 }
 
-#main {
+.main {
     width: 780px;
     margin: 0 auto;
     text-align: center;
@@ -14,7 +14,7 @@ ol {
     list-style-type: none;
     position: relative;
     list-style-position: outside;
-    margin: 0px auto;
+    margin: 0 auto;
     padding: 0;
 }
 
@@ -23,7 +23,7 @@ ol li {
     background: #F3F3F3;
     border-radius: 10px;
     border: 2px solid black;
-    margin: 0px auto;
+    margin: 0 auto;
     margin-top: 3px;
     margin-bottom: 3px;
     padding: 0.25em;
@@ -60,7 +60,7 @@ button {
     float: right;
 }
 
-#addChar {
+.addCharContainer {
     display: block;
     font-family: Verdana, Arial, Sans-Serif;
     background: #F3F3F3;
@@ -73,10 +73,21 @@ button {
     width: 520px;
 }
 
+.addCharForm {
+    display: inline;
+}
+
 .inputLabel {
     position: absolute;
     font-size: 50%;
     top: -8px;
+}
+
+.inputLabelLong {
+    position: absolute;
+    font-size: 50%;
+    top: -8px;
+    left: 33px;
 }
 
 input[type=number] {
@@ -97,24 +108,23 @@ input[type=text] {
     top: -2px;
 }
 
-.init,.dex {
+.initInput {
     position: relative;
     left: -6px;
 }
 
-#queue, #outQueue {
+.queue {
     margin: 10px;
     display: inline-block;
     font-family: Verdana, Arial, Sans-Serif;
     background: #9B9B9B;
     border-radius: 10px;
     border: 2px solid black;
-    margin: 6px;
     padding: 20px;
     width: 680px;
 }
 
-#directions {
+.directions {
     font-size: .5em;
     text-align: left;
     margin: 10px;
@@ -123,17 +133,16 @@ input[type=text] {
     background: #FFFFFF;
     border-radius: 10px;
     border: 1px solid black;
-    margin: 6px;
     padding: 0;
     width: 520px;
 }
 
-#dirlist {
+.dirlist {
     list-style-position: outside;
     margin: .5em;
 }
 
-#title {
+.title {
     color: white;
     font-size: 2em;
     letter-spacing: .4em;
@@ -143,7 +152,7 @@ input[type=text] {
     left: +.2em;
 }
 
-#spacer {
+.spacer {
     height: 1em;
 }
 
@@ -170,22 +179,15 @@ input[type=text] {
     top: 2px;
 }
 
-#initControl {
+.initControl {
     position: relative;
     top: 7px;
     vertical-align: middle;
 }
 
-.initControl {
+.initControlButton {
     height: 35px;
     margin: 0 auto;
     padding-left: 5px;
     padding-right: 5px;
-}
-
-#start {
-    width: 63px;
-    /*height: 33px;*/
-    /*margin: 0 auto;*/
-    /*padding: 0;*/
 }

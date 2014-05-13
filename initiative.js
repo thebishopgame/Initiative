@@ -1,8 +1,10 @@
+/*global $:false */
+
 var initQueue = [];
 var outQueue = [];
 var active = 0;
 var inInit = false;
-var focus = 0;
+var focusedElem = 0;
 
 function character(name, init, dex) 
 {
@@ -268,10 +270,10 @@ $(document).ready(function()
     $(document).keydown(function(key) {
         switch(parseInt(key.keyCode)) {
             case 9:
-                $('.pause[id=' + String(focus) + ']').focus(); //wtf? offset by 1 for some reason
-                focus++;
-                if(focus > initQueue.length-1)
-                    focus = 0;
+                $('.pause[id=' + String(focusedElem) + ']').focus(); //wtf? offset by 1 for some reason
+                focusedElem++;
+                if(focusedElem > initQueue.length-1)
+                    focusedElem = 0;
                 break;
             
             case 27:
@@ -295,7 +297,6 @@ $(document).ready(function()
                 
                 saveState();
                 return false;
-                break;
         }
     });
 });
