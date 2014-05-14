@@ -20,6 +20,8 @@ function compareInit(a,b)
     return 0;
 }
 
+var transitionGroup = React.addons.CSSTransitionGroup;
+
 // container and input box for adding new characters
 var addCharBar = React.createClass({
     handleSubmit: function() {
@@ -28,11 +30,22 @@ var addCharBar = React.createClass({
         this.refs.charNameInput.getDOMNode().focus();
         return false;
     },
+    handleFocus: function() {
+        this.props.handleFocus();
+    },
+    handleBlur: function() {
+        this.props.handleBlur();
+    },
     render: function() {
         return (
             <div className="addCharContainer">Name:
                 <form className="addCharForm" onSubmit={this.handleSubmit}>
-                    <input ref="charNameInput" type="text" maxLength="15"/>
+                    <input autoFocus ref="charNameInput" 
+                                     type="text" 
+                                     maxLength="15"
+                                     onFocus={this.handleFocus}
+                                     onBlur={this.handleBlur}
+                                     id="charNameInput"/>
                     <button id="addButton">Add</button>
                 </form>
             </div>
@@ -76,6 +89,20 @@ var inChar = React.createClass({
     handleDexChange: function() {
         this.props.onDexChange(this.props.id, this.refs.dex.getDOMNode().value);
     },
+    handleKeyDown: function(e) {
+        switch(parseInt(e.keyCode)) {
+            case 13:
+                this.refs.init.getDOMNode().blur();
+                break;
+            
+            case 27:
+                this.refs.init.getDOMNode().blur();
+                break;
+            
+            default:
+                break;
+        }
+    },
     render: function() {
         var actClass;
         
@@ -107,12 +134,14 @@ var inChar = React.createClass({
                     <label className="inputLabel">Init</label>
                     <input type="number" 
                            onChange={this.handleInitChange}
+                           onKeyDown={this.handleKeyDown}
                            ref="init"
                            maxlength="2" 
                            min="0" 
                            max="99" 
                            className="initInput" 
-                           value={this.props.init}/>
+                           value={this.props.init}
+                           id={this.props.id}/>
                     <label className="inputLabelLong">Bonus</label>
                     <input type="number"
                            onChange={this.handleBonusChange}
@@ -207,26 +236,32 @@ var inQueueCmpt = React.createClass({
         this.refs.gen.getDOMNode().blur();
         this.props.onGen();
     },
+    
     handleSort: function() {
         this.refs.sort.getDOMNode().blur();
         this.props.onSort();
     },
+    
     handleStartStop:function() {
         this.refs.startstop.getDOMNode().blur();
         this.props.onStartStop();
     },
+    
     handleNext:function() {
         this.refs.next.getDOMNode().blur();
         this.props.onNext();
     },
+    
     handleReset: function() {
         this.refs.reset.getDOMNode().blur();
         this.props.onReset();
     },
+    
     handleClear: function() {
         this.refs.clear.getDOMNode().blur();
         this.props.onClear();
     },
+    
     render: function() {
         var id = 0;
         var chars = this.props.charList.map(function(char) {
@@ -244,14 +279,18 @@ var inQueueCmpt = React.createClass({
                            onCharDel={this.props.onCharDel} 
                            onCharPause={this.props.onCharPause}
                            active={this.props.active}
-                           inInit={this.props.inInit}/>;
+                           inInit={this.props.inInit}
+                           focused={this.props.focused}/>;
         }.bind(this));
         
         var startstop = this.props.inInit ? "Stop" : "Start";
         
         return (
             <div id="inQueue" className="queue">
-                <ol>{chars}</ol>
+                <transitionGroup transitionName="queueTransition" 
+                                 component={React.DOM.ol}>
+                    {chars}
+                </transitionGroup>
                 <div className='initControl'>
                     <button className='initControlButton'
                             ref="gen"
@@ -326,10 +365,20 @@ var outQueueCmpt = React.createClass({
 // main app class, also the state holder
 var app = React.createClass({
     getInitialState: function() {
-        if (localStorage.getItem("state") !== "")
+        if (localStorage.getItem("state") !== null)
             return JSON.parse(localStorage.state);
         else
-            return {inQueue: [], outQueue: [], inInit: false, active: 0};
+            return {inQueue: [], 
+                    outQueue: [], 
+                    inInit: false, 
+                    active: 0, 
+                    focused: -1,
+                    addFocus: true};
+    },
+    
+    componentDidMount: function() {
+        document.addEventListener("keydown", this.handleKeyDown);
+        this.setState({addFocus: true});
     },
     
     saveState: function() {
@@ -395,8 +444,12 @@ var app = React.createClass({
             queue[id] = queue[id-1];
             queue[id-1] = goingUp;
             
-            if (this.state.inInit)
-                act--;
+            if (this.state.inInit) {
+                if(id == this.state.active)
+                    act--;
+                if(id-1 == this.state.active)
+                    act++;
+            }
                 
             this.setState({
                 inQueue: queue,
@@ -408,12 +461,23 @@ var app = React.createClass({
     handleCharDown: function(id) {
         if (id < this.state.inQueue.length - 1) {
             var queue = this.state.inQueue;
+            var act = this.state.active;
             
             var goingDown = queue[id];
             queue[id] = queue[id+1];
             queue[id+1] = goingDown;
             
-            this.setState({inQueue: queue}, this.saveState);
+            if (this.state.inInit) {
+                if(id == this.state.active)
+                    act++;
+                if(id+1 == this.state.active)
+                    act--;
+            }
+            
+            this.setState({
+                inQueue: queue,
+                active: act
+            }, this.saveState);
         }
     },
     
@@ -435,9 +499,15 @@ var app = React.createClass({
         if (act >= this.state.inQueue.length)
             act = 0;
             
+        var continueInit = false;
+        
+        if (this.state.inInit)    
+            continueInit = queue.length < 1 ? false : true;
+            
         this.setState({
             inQueue: queue,
-            active: act
+            active: act,
+            inInit: continueInit
         }, this.saveState);
     },
     
@@ -571,13 +641,94 @@ var app = React.createClass({
         this.saveState();
     },
     
+    handleKeyDown: function(e) {
+        switch(parseInt(e.keyCode)) {
+            case 9:
+                e.preventDefault();
+                
+                var curFocus = this.state.focused;
+                if (++curFocus >= this.state.inQueue.length)
+                    curFocus = 0;
+                    
+                document.getElementById(curFocus).focus();
+                    
+                this.setState({focused: curFocus}, this.saveState);
+                break;
+                
+            case 27:
+                if(!this.state.addFocus) {
+                    this.setState({
+                        inInit: false,
+                        active: 0
+                    }, this.saveState);
+                }
+                else
+                    document.getElementById("charNameInput").blur();
+                break;
+            
+            case 32:
+                if(!this.state.addFocus) {
+                    e.preventDefault();
+                    if(this.state.inInit) {
+                        var act = this.state.active;
+                        
+                        if (++act >= (this.state.inQueue.length))
+                            act = 0;
+                        
+                        this.setState({active: act}, this.saveState);
+                    }
+                    else {
+                        this.setState({
+                            inInit: true,
+                            active: 0
+                        }, this.saveState);
+                    }
+                }
+                break;
+            case 65:
+                if(!this.state.addFocus) {
+                    e.preventDefault();
+                    document.getElementById("charNameInput").focus();
+                }
+                break;
+            
+            case 71:
+                if(!this.state.addFocus) {
+                    e.preventDefault();
+                    this.handleGen();
+                }
+                break;
+                
+            case 83:
+                if(!this.state.addFocus) {
+                    e.preventDefault();
+                    this.handleSort();
+                }
+                break;
+                
+            default:
+                break;
+        }
+    },
+    
+    handleAddFocus: function() {
+        this.setState({addFocus: true});
+    },
+    
+    handleAddBlur: function() {
+        this.setState({addFocus: false});
+    },
+    
     render: function() {
         return (
             <div>
-                <addCharBar onAddChar={this.handleCharAdd} />
+                <addCharBar onAddChar={this.handleCharAdd}
+                            handleFocus={this.handleAddFocus}
+                            handleBlur={this.handleAddBlur}/>
                 <inQueueCmpt charList={this.state.inQueue}
                              inInit={this.state.inInit}
                              active={this.state.active}
+                             focused={this.state.focused}
                              onInitChange={this.handleInitChangeIn}
                              onBonusChange={this.handleBonusChangeIn}
                              onDexChange={this.handleDexChangeIn}

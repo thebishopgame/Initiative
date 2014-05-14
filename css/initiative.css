@@ -199,3 +199,21 @@ input[type=text] {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.queueTransition-enter {
+    opacity: 0.01;
+    transition: opacity .25s ease-in;
+}
+
+.queueTransition-enter.queueTransition-enter-active {
+    opacity: 1;
+}
+
+.queueTransition-leave {
+    opacity: 1;
+    transition: opacity .25s ease-in;
+}
+
+.queueTransition-leave.queueTransition-leave-active {
+    opacity: 0.01;
+}
