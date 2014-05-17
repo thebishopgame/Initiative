@@ -1,0 +1,17 @@
+.ass-enter {
+    opacity: 0;
+    transition: opacity .5s ease-in;
+}
+
+.ass-enter-active {
+    opacity: 1;
+}
+
+.ass-leave {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+
+.ass-leave-active {
+    opacity: 0;
+}

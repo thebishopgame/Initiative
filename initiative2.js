@@ -20,8 +20,6 @@ function compareInit(a,b)
     return 0;
 }
 
-var transitionGroup = React.addons.CSSTransitionGroup;
-
 // container and input box for adding new characters
 var addCharBar = React.createClass({
     handleSubmit: function() {
@@ -55,6 +53,16 @@ var addCharBar = React.createClass({
 
 // a row in the inQueue representing a single character in initiative
 var inChar = React.createClass({
+    componentDidMount: function() {
+        console.log(this.props.id);
+        var newChar = $(document.getElementById("in"+ this.props.id));
+        newChar.css("opacity","0");
+        newChar.css("height","0");
+        
+        newChar.animate({height: "auto"}, 250, function() {
+            newChar.animate({opacity: 1}, 250);
+        });
+    },
     handleUp: function() {
         this.refs.up.getDOMNode().blur();
         this.props.onCharUp(this.props.id);
@@ -107,12 +115,14 @@ var inChar = React.createClass({
         var actClass;
         
         if (this.props.inInit && (this.props.id === this.props.active))
-            actClass = "active";
+            actClass = "inChar active";
         else
-            actClass = "";
-        
+            actClass = "inChar";
+    
+        var id = "in" + this.props.id;
+    
         return (
-            <li className={actClass}>{this.props.charName}
+            <div id={id} className={actClass}>{this.props.charName}
                 <div className="charControls">
                     <button ref="up" onClick={this.handleUp}>
                         <img className="controlimg" src="img/uparrow.png" />
@@ -161,7 +171,7 @@ var inChar = React.createClass({
                            className="initInput" 
                            value={this.props.dex}/>
                 </div>
-            </li>
+            </div>
         );
     }
 });
@@ -264,8 +274,8 @@ var inQueueCmpt = React.createClass({
     
     render: function() {
         var id = 0;
-        var chars = this.props.charList.map(function(char) {
-            return <inChar id={id++}
+        var chars = this.props.charList.map(function(char, i) {
+            return <inChar id={i}
                            charName={char.charName}
                            init={char.init}
                            bonus={char.bonus}
@@ -286,11 +296,10 @@ var inQueueCmpt = React.createClass({
         var startstop = this.props.inInit ? "Stop" : "Start";
         
         return (
-            <div id="inQueue" className="queue">
-                <transitionGroup transitionName="queueTransition" 
-                                 component={React.DOM.ol}>
+            <div id="inQueue" className="queue">Round:{this.props.round}
+                <div className="queueContainer">
                     {chars}
-                </transitionGroup>
+                </div>
                 <div className='initControl'>
                     <button className='initControlButton'
                             ref="gen"
@@ -354,9 +363,9 @@ var outQueueCmpt = React.createClass({
         
         return (
             <div id="outQueue" style={hideStyle} className="queue">
-                <ol>
+                <div className="queueContainer">
                     {chars}
-                </ol>
+                </div>
             </div>
         );
     }
@@ -373,6 +382,7 @@ var app = React.createClass({
                     inInit: false, 
                     active: 0, 
                     focused: -1,
+                    round: 0,
                     addFocus: true};
     },
     
@@ -493,22 +503,38 @@ var app = React.createClass({
     handleCharDelIn: function(id) {
         var queue = this.state.inQueue;
         var act = this.state.active;
+        var newRound = this.state.round;
+        var doneAnim = $.Deferred();
         
-        queue.splice(id, 1);
-        
-        if (act >= this.state.inQueue.length)
-            act = 0;
+        var delChar = $(document.getElementById("in" +id));
+        delChar.animate({opacity: 0}, 250, function() {
+            delChar.animate({height: 0}, 250, function() {
+                delChar.css("opacity","1");
+                delChar.css("height","auto");
+                doneAnim.resolve();
+            });
+        });
             
-        var continueInit = false;
-        
-        if (this.state.inInit)    
-            continueInit = queue.length < 1 ? false : true;
+        doneAnim.done(function() {
+            queue.splice(id, 1);
             
-        this.setState({
-            inQueue: queue,
-            active: act,
-            inInit: continueInit
-        }, this.saveState);
+            if (act >= this.state.inQueue.length) {
+                act = 0;
+                newRound = 0;
+            }
+                
+            var continueInit = false;
+            
+            if (this.state.inInit)    
+                continueInit = queue.length < 1 ? false : true;
+                
+            this.setState({
+                inQueue: queue,
+                active: act,
+                inInit: continueInit,
+                round: newRound
+            }, this.saveState);
+        }.bind(this));
     },
     
     handleCharDelOut: function(id) {
@@ -522,17 +548,21 @@ var app = React.createClass({
         var inQ = this.state.inQueue;
         var outQ = this.state.outQueue;
         var act = this.state.active;
+        var newRound = this.state.round;
         
         outQ.push(inQ[id]);
         inQ.splice(id, 1);
         
-        if (act >= this.state.inQueue.length)
+        if (act >= this.state.inQueue.length) {
             act = 0;
+            newRound = 0;
+        }
         
         this.setState({
             inQueue: inQ,
             outQueue: outQ,
-            active: act
+            active: act,
+            round: newRound
         }, this.saveState);
     },
     
@@ -556,7 +586,8 @@ var app = React.createClass({
         this.setState({
             inQueue: queue,
             inInit: false,
-            active: 0
+            active: 0,
+            round: 0
         }, this.saveState);
     },
     
@@ -575,7 +606,8 @@ var app = React.createClass({
             inQueue: inQ,
             outQueue: outQ,
             inInit: false,
-            active: 0
+            active: 0,
+            round: 0
         }, this.saveState);
         
     },
@@ -593,13 +625,19 @@ var app = React.createClass({
     
     handleNext: function() {
         var act = this.state.active;
+        var newRound = this.state.round;
         
         if (this.state.inInit) {
             act++;
-            if (act >= this.state.inQueue.length)
+            if (act >= this.state.inQueue.length) {
                 act = 0;
+                newRound = 0;               
+            }
                 
-            this.setState({active: act}, this.saveState);
+            this.setState({
+                active: act,
+                round: newRound
+            }, this.saveState);
         }
     },
     
@@ -616,7 +654,8 @@ var app = React.createClass({
             inQueue: inQ,
             outQueue: outQ,
             inInit: false,
-            active: 0
+            active: 0,
+            round: 0
         });
         
         this.saveState();
@@ -635,7 +674,8 @@ var app = React.createClass({
             inQueue: inQ,
             outQueue: outQ,
             inInit: false,
-            active: 0
+            active: 0,
+            round: 0
         });
 
         this.saveState();
@@ -671,11 +711,17 @@ var app = React.createClass({
                     e.preventDefault();
                     if(this.state.inInit) {
                         var act = this.state.active;
+                        var newRound = this.state.round;
                         
-                        if (++act >= (this.state.inQueue.length))
+                        if (++act >= (this.state.inQueue.length)) {
                             act = 0;
+                            newRound++;
+                        }
                         
-                        this.setState({active: act}, this.saveState);
+                        this.setState({
+                            active: act,
+                            round: newRound
+                        }, this.saveState);
                     }
                     else {
                         this.setState({
@@ -729,6 +775,7 @@ var app = React.createClass({
                              inInit={this.state.inInit}
                              active={this.state.active}
                              focused={this.state.focused}
+                             round={this.state.round}
                              onInitChange={this.handleInitChangeIn}
                              onBonusChange={this.handleBonusChangeIn}
                              onDexChange={this.handleDexChangeIn}
