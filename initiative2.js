@@ -54,14 +54,13 @@ var addCharBar = React.createClass({
 // a row in the inQueue representing a single character in initiative
 var inChar = React.createClass({
     componentDidMount: function() {
-        console.log(this.props.id);
         var newChar = $(document.getElementById("in"+ this.props.id));
-        newChar.css("opacity","0");
-        newChar.css("height","0");
+        var queueContainer = $(document.getElementById("inQueue"));
         
-        newChar.animate({height: "auto"}, 250, function() {
-            newChar.animate({opacity: 1}, 250);
-        });
+        newChar.css("opacity","0");
+        queueContainer.css("height","auto");
+        
+        newChar.animate({opacity: 1}, 200);
     },
     handleUp: function() {
         this.refs.up.getDOMNode().blur();
@@ -112,12 +111,10 @@ var inChar = React.createClass({
         }
     },
     render: function() {
-        var actClass;
-        
-        if (this.props.inInit && (this.props.id === this.props.active))
-            actClass = "inChar active";
-        else
-            actClass = "inChar";
+        var actClass = React.addons.classSet({
+            "inChar": true,
+            "active": this.props.inInit && (this.props.id === this.props.active)
+        });
     
         var id = "in" + this.props.id;
     
@@ -300,6 +297,7 @@ var inQueueCmpt = React.createClass({
                 <div className="queueContainer">
                     {chars}
                 </div>
+                <div id="queueControlSpacer"/>
                 <div className='initControl'>
                     <button className='initControlButton'
                             ref="gen"
@@ -396,10 +394,17 @@ var app = React.createClass({
     },
     
     handleCharAdd: function(name) {
-        if (name !== "") {    
+        if (name !== "") {
             var queue = this.state.inQueue;
-            queue.push({charName:name, init:10, bonus:0, dex:10});
-            this.setState({inQueue: queue}, this.saveState);
+            var queueContainer = $(document.getElementById("queueControlSpacer"));
+            var curHeight = queueContainer.height();
+            
+            queueContainer.animate({height: curHeight+50}, 100, function() {
+                queueContainer.css("height", "auto");
+            
+                queue.push({charName:name, init:10, bonus:0, dex:10});
+                this.setState({inQueue: queue}, this.saveState);
+            }.bind(this));
         }
     },
     
@@ -507,8 +512,8 @@ var app = React.createClass({
         var doneAnim = $.Deferred();
         
         var delChar = $(document.getElementById("in" +id));
-        delChar.animate({opacity: 0}, 250, function() {
-            delChar.animate({height: 0}, 250, function() {
+        delChar.animate({opacity: 0}, 200, function() {
+            delChar.animate({height: 0}, 100, "linear", function() {
                 delChar.css("opacity","1");
                 delChar.css("height","auto");
                 doneAnim.resolve();

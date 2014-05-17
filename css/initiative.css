@@ -199,3 +199,8 @@ input[type=text] {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.justAdded {
+    height: 0;
+    opacity: 0;
+}
