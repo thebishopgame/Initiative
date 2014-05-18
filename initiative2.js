@@ -119,7 +119,8 @@ var inChar = React.createClass({
         var id = "in" + this.props.id;
     
         return (
-            <div id={id} className={actClass}>{this.props.charName}
+            <div id={id} className={actClass}>
+                {this.props.charName}
                 <div className="charControls">
                     <button ref="up" onClick={this.handleUp}>
                         <img className="controlimg" src="img/uparrow.png" />
@@ -138,35 +139,37 @@ var inChar = React.createClass({
                     </button>
                 </div>
                 <div className="initdex">
-                    <label className="inputLabel">Init</label>
-                    <input type="number" 
-                           onChange={this.handleInitChange}
-                           onKeyDown={this.handleKeyDown}
-                           ref="init"
-                           maxlength="2" 
-                           min="0" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.init}
-                           id={this.props.id}/>
-                    <label className="inputLabelLong">Bonus</label>
-                    <input type="number"
-                           onChange={this.handleBonusChange}
-                           ref="bonus"
-                           maxlength="2" 
-                           min="-99" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.bonus}/>
-                    <label className="inputLabel">Dex</label>
-                    <input type="number"
-                           onChange={this.handleDexChange}
-                           ref="dex"
-                           maxlength="2" 
-                           min="0" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.dex}/>
+                    <div className="labelRow">
+                        Init Bonus Dex
+                    </div>
+                    <div className="controlRow">
+                        <input type="number" 
+                               onChange={this.handleInitChange}
+                               onKeyDown={this.handleKeyDown}
+                               ref="init"
+                               maxlength="2" 
+                               min="0" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.init}
+                               id={this.props.id}/>
+                        <input type="number"
+                               onChange={this.handleBonusChange}
+                               ref="bonus"
+                               maxlength="2" 
+                               min="-99" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.bonus}/>
+                        <input type="number"
+                               onChange={this.handleDexChange}
+                               ref="dex"
+                               maxlength="2" 
+                               min="0" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.dex}/>
+                    </div>
                 </div>
             </div>
         );
@@ -396,11 +399,10 @@ var app = React.createClass({
     handleCharAdd: function(name) {
         if (name !== "") {
             var queue = this.state.inQueue;
-            var queueContainer = $(document.getElementById("queueControlSpacer"));
-            var curHeight = queueContainer.height();
+            var spacer = $(document.getElementById("queueControlSpacer"));
             
-            queueContainer.transition({height: curHeight+50}, 200, function() {
-                queueContainer.css("height", "auto");
+            spacer.transition({height: 50}, 100, 'ease', function() {
+                spacer.css("height", 0);
                 queue.push({charName:name, init:10, bonus:0, dex:10});
                 this.setState({inQueue: queue}, this.saveState);
             }.bind(this));
@@ -512,15 +514,15 @@ var app = React.createClass({
         
         var delChar = $(document.getElementById("in" +id));
         delChar.transition({opacity: 0}, 200, function() {
-            delChar.transition({height: 0}, 200, "linear", function() {
-                delChar.css("opacity","1");
-                delChar.css("height","auto");
+            delChar.transition({height: 0}, 200, "ease", function() {
                 doneAnim.resolve();
             });
         });
             
         doneAnim.done(function() {
             queue.splice(id, 1);
+            delChar.css("opacity","1");
+            delChar.css("height","auto");
             
             if (act >= this.state.inQueue.length) {
                 act = 0;

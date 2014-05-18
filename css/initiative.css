@@ -5,17 +5,12 @@ body {
 }
 
 .main {
-    width: 780px;
     margin: 0 auto;
     text-align: center;
 }
 
 .queueContainer {
-    list-style-type: none;
-    position: relative;
-    list-style-position: outside;
-    margin: 0 auto;
-    padding: 0;
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .inChar {
@@ -23,18 +18,54 @@ body {
     background: #F3F3F3;
     border-radius: 10px;
     border: 2px solid black;
-    margin: 0 auto;
     margin-top: 3px;
     margin-bottom: 3px;
     padding: 0.25em;
-    width: 640px;
-    /*height: 30px;*/
     font-family: Verdana, Arial, Sans-Serif;
-    vertical-align: middle;
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .active {
     background: #F39814; color: white;
+}
+
+.initdex {
+    float: right;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+}
+
+.labelRow {
+    flex-shrink: 1;
+    height: 20px;
+    margin: auto;
+    font-size: 50%;
+}
+
+.controlRow {
+    height: 30px;
+    flex-shrink: 1;
+    margin: auto;
+    font-size: 50%;
+}
+
+.initInput {
+    width: 35px;
+    margin: 0 2px 0 2px;
+    font-size: 1em;
+}
+
+/*input[type=number] {*/
+/*    width: 35px;*/
+/*    height: 20px;*/
+/*    padding: 0;*/
+/*    margin: 2px;*/
+/*    font-size: .5em;*/
+/*}*/
+
+.charControls {
+    float: right;
 }
 
 button {
@@ -59,17 +90,6 @@ button {
     resize: none;
 }
 
-.initdex {
-    float: right;
-    position: relative;
-    top: +2px;
-    text-align: center;
-}
-
-.charControls {
-    float: right;
-}
-
 .addCharContainer {
     display: block;
     font-family: Verdana, Arial, Sans-Serif;
@@ -87,27 +107,6 @@ button {
     display: inline;
 }
 
-.inputLabel {
-    position: absolute;
-    font-size: 50%;
-    top: -8px;
-}
-
-.inputLabelLong {
-    position: absolute;
-    font-size: 50%;
-    top: -8px;
-    left: 33px;
-}
-
-input[type=number] {
-    width: 35px;
-    height: 20px;
-    padding: 0;
-    margin: 2px;
-    font-size: .5em;
-}
-
 input[type=text] {
     height: 25px;
     padding: 0;
@@ -116,11 +115,6 @@ input[type=text] {
     vertical-align: middle;
     position: relative;
     top: -2px;
-}
-
-.initInput {
-    position: relative;
-    left: -6px;
 }
 
 .queue {
@@ -199,4 +193,9 @@ input[type=text] {
     margin: 0 auto;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.queueControlSpacer {
+    height: 0;
+    -webkit-transform: translate3d(0, 0, 0);
 }
