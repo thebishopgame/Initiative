@@ -60,7 +60,7 @@ var inChar = React.createClass({
         newChar.css("opacity","0");
         queueContainer.css("height","auto");
         
-        newChar.animate({opacity: 1}, 200);
+        newChar.transition({opacity: 1}, 200);
     },
     handleUp: function() {
         this.refs.up.getDOMNode().blur();
@@ -399,9 +399,8 @@ var app = React.createClass({
             var queueContainer = $(document.getElementById("queueControlSpacer"));
             var curHeight = queueContainer.height();
             
-            queueContainer.animate({height: curHeight+50}, 100, function() {
+            queueContainer.transition({height: curHeight+50}, 200, function() {
                 queueContainer.css("height", "auto");
-            
                 queue.push({charName:name, init:10, bonus:0, dex:10});
                 this.setState({inQueue: queue}, this.saveState);
             }.bind(this));
@@ -512,8 +511,8 @@ var app = React.createClass({
         var doneAnim = $.Deferred();
         
         var delChar = $(document.getElementById("in" +id));
-        delChar.animate({opacity: 0}, 200, function() {
-            delChar.animate({height: 0}, 100, "linear", function() {
+        delChar.transition({opacity: 0}, 200, function() {
+            delChar.transition({height: 0}, 200, "linear", function() {
                 delChar.css("opacity","1");
                 delChar.css("height","auto");
                 doneAnim.resolve();
