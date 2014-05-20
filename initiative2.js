@@ -20,6 +20,8 @@ function compareInit(a,b)
     return 0;
 }
 
+var ReactTransitionGroup = React.addons.TransitionGroup;
+
 // container and input box for adding new characters
 var addCharBar = React.createClass({
     handleSubmit: function() {
@@ -53,14 +55,21 @@ var addCharBar = React.createClass({
 
 // a row in the inQueue representing a single character in initiative
 var inChar = React.createClass({
-    componentDidMount: function() {
-        var newChar = $(document.getElementById("in"+ this.props.id));
-        var queueContainer = $(document.getElementById("inQueue"));
+    componentWillEnter: function(cb) {
+        var $node = $(this.getDOMNode());
         
-        newChar.css("opacity","0");
-        queueContainer.css("height","auto");
+        $node.css("display", "none");
+        $node.css("opacity", "0");
+        $node.slideDown(100, function() {
+            $node.transition({opacity: 1}, 100, cb);            
+        });
+    },
+    componentWillLeave: function(cb) {
+        var $node = $(this.getDOMNode());
         
-        newChar.transition({opacity: 1}, 200);
+        $node.transition({opacity: 0}, 100, function() {
+            $node.slideUp(100, "linear", cb);    
+        });
     },
     handleUp: function() {
         this.refs.up.getDOMNode().blur();
@@ -112,7 +121,7 @@ var inChar = React.createClass({
     },
     render: function() {
         var actClass = React.addons.classSet({
-            "inChar": true,
+            "initChar": true,
             "active": this.props.inInit && (this.props.id === this.props.active)
         });
     
@@ -178,6 +187,22 @@ var inChar = React.createClass({
 
 // a row in the outQueue representing a single character out of initiative
 var outChar = React.createClass({
+    componentWillEnter: function(cb) {
+        var $node = $(this.getDOMNode());
+        
+        $node.css("display", "none");
+        $node.css("opacity", "0");
+        $node.slideDown(100, function() {
+            $node.transition({opacity: 1}, 100, cb);            
+        });
+    },
+    componentWillLeave: function(cb) {
+        var $node = $(this.getDOMNode());
+        
+        $node.transition({opacity: 0}, 100, function() {
+            $node.slideUp(100, "linear", cb);    
+        });
+    },
     handlePlay: function() {
         this.props.onCharPlay(this.props.id);
         return false;
@@ -197,7 +222,7 @@ var outChar = React.createClass({
     },
     render: function() {
         return (
-            <li>{this.props.charName}
+            <div className="initChar">{this.props.charName}
                 <div className="charControls">
                     <button className="control play" onClick={this.handlePlay}>
                         <img className="controlimg" src="img/play.png" />
@@ -207,35 +232,39 @@ var outChar = React.createClass({
                     </button>
                 </div>
                 <div className="initdex">
-                    <label className="inputLabel">Init</label>
-                    <input type="number" 
-                           onChange={this.handleInitChange}
-                           ref="init"
-                           maxlength="2" 
-                           min="0" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.init}/>
-                    <label className="inputLabelLong">Bonus</label>
-                    <input type="number"
-                           onChange={this.handleBonusChange}
-                           ref="bonus"
-                           maxlength="2" 
-                           min="-99" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.bonus}/>
-                    <label className="inputLabel">Dex</label>
-                    <input type="number"
-                           onChange={this.handleDexChange}
-                           ref="dex"
-                           maxlength="2" 
-                           min="0" 
-                           max="99" 
-                           className="initInput" 
-                           value={this.props.dex}/>
+                    <div className="labelRow">
+                        Init Bonus Dex
+                    </div>
+                    <div className="controlRow">
+                        <input type="number" 
+                               onChange={this.handleInitChange}
+                               onKeyDown={this.handleKeyDown}
+                               ref="init"
+                               maxlength="2" 
+                               min="0" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.init}
+                               id={this.props.id}/>
+                        <input type="number"
+                               onChange={this.handleBonusChange}
+                               ref="bonus"
+                               maxlength="2" 
+                               min="-99" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.bonus}/>
+                        <input type="number"
+                               onChange={this.handleDexChange}
+                               ref="dex"
+                               maxlength="2" 
+                               min="0" 
+                               max="99" 
+                               className="initInput" 
+                               value={this.props.dex}/>
+                    </div>
                 </div>
-            </li>
+            </div>
         );
     }
 });
@@ -262,20 +291,15 @@ var inQueueCmpt = React.createClass({
         this.props.onNext();
     },
     
-    handleReset: function() {
-        this.refs.reset.getDOMNode().blur();
-        this.props.onReset();
-    },
-    
     handleClear: function() {
         this.refs.clear.getDOMNode().blur();
         this.props.onClear();
     },
     
     render: function() {
-        var id = 0;
         var chars = this.props.charList.map(function(char, i) {
-            return <inChar id={i}
+            return <inChar key={char.charName}
+                           id={i}
                            charName={char.charName}
                            init={char.init}
                            bonus={char.bonus}
@@ -297,10 +321,9 @@ var inQueueCmpt = React.createClass({
         
         return (
             <div id="inQueue" className="queue">Round:{this.props.round}
-                <div className="queueContainer">
+                <ReactTransitionGroup>
                     {chars}
-                </div>
-                <div id="queueControlSpacer"/>
+                </ReactTransitionGroup>
                 <div className='initControl'>
                     <button className='initControlButton'
                             ref="gen"
@@ -323,11 +346,6 @@ var inQueueCmpt = React.createClass({
                         Next
                     </button>&nbsp;&nbsp;
                     <button className='initControlButton'
-                            ref="reset"
-                            onClick={this.handleReset}>
-                        Reset Init
-                    </button>
-                    <button className='initControlButton'
                             ref="clear"
                             onClick={this.handleClear}>
                         Clear
@@ -340,14 +358,11 @@ var inQueueCmpt = React.createClass({
 
 // the out-of-initiative queue, for those not in a given battle
 var outQueueCmpt = React.createClass({
+    componentDidMount: function() {
+        if (this.props.charList.length === 0)
+            $(this.getDOMNode()).css("display","none");
+    },
     render: function() {
-        var hide = this.props.charList.length > 0 ? false : true;
-        var hideStyle;
-        if(hide)
-            hideStyle = {display: 'none'};
-        else
-            hideStyle = {display: 'inline-block'};
-        
         var id = 0;
         var chars = this.props.charList.map(function(char) {
             return <outChar id={id++}
@@ -363,10 +378,10 @@ var outQueueCmpt = React.createClass({
         }.bind(this));
         
         return (
-            <div id="outQueue" style={hideStyle} className="queue">
-                <div className="queueContainer">
+            <div id="outQueue" className="queue">
+                <ReactTransitionGroup>
                     {chars}
-                </div>
+                </ReactTransitionGroup>
             </div>
         );
     }
@@ -383,7 +398,7 @@ var app = React.createClass({
                     inInit: false, 
                     active: 0, 
                     focused: -1,
-                    round: 0,
+                    round: "-",
                     addFocus: true};
     },
     
@@ -399,13 +414,8 @@ var app = React.createClass({
     handleCharAdd: function(name) {
         if (name !== "") {
             var queue = this.state.inQueue;
-            var spacer = $(document.getElementById("queueControlSpacer"));
-            
-            spacer.transition({height: 50}, 100, 'ease', function() {
-                spacer.css("height", 0);
-                queue.push({charName:name, init:10, bonus:0, dex:10});
-                this.setState({inQueue: queue}, this.saveState);
-            }.bind(this));
+            queue.push({charName:name, init:10, bonus:0, dex:10});
+            this.setState({inQueue: queue}, this.saveState);
         }
     },
     
@@ -466,11 +476,25 @@ var app = React.createClass({
                 if(id-1 == this.state.active)
                     act++;
             }
-                
-            this.setState({
-                inQueue: queue,
-                active: act
-            }, this.saveState);
+            
+            var $node = $(document.getElementById("in" + id));
+            var $nodeAbove = $(document.getElementById("in" + (id-1)));
+            
+            $node.css("z-index","1");
+            $nodeAbove.css("z-index","0");
+            
+            $node.transition({y: "-55"}, 100);
+            $nodeAbove.transition({y: "55"}, 100);
+            
+            $.when($node, $nodeAbove).done(function() {
+                this.setState({
+                    inQueue: queue,
+                    active: act
+                }, this.saveState);  
+    
+                $node.css("y","0");
+                $nodeAbove.css("y","0");
+            }.bind(this));
         }
     },
     
@@ -490,10 +514,24 @@ var app = React.createClass({
                     act--;
             }
             
-            this.setState({
-                inQueue: queue,
-                active: act
-            }, this.saveState);
+            var $node = $(document.getElementById("in" + id));
+            var $nodeBelow = $(document.getElementById("in" + (id+1)));
+            
+            $node.css("z-index","1");
+            $nodeBelow.css("z-index","0");
+            
+            $node.transition({y: "55"}, 100);
+            $nodeBelow.transition({y: "-55"}, 100);
+            
+            $.when($node, $nodeBelow).done(function() {
+                this.setState({
+                    inQueue: queue,
+                    active: act
+                }, this.saveState);  
+    
+                $node.css("y","0");
+                $nodeBelow.css("y","0");
+            }.bind(this));
         }
     },
     
@@ -503,44 +541,60 @@ var app = React.createClass({
         queue.push(queue[id]);
         queue.splice(id, 1);
         
-        this.setState({inQueue: queue}, this.saveState);
+        var $node = $(document.getElementById("in" + id));
+        $node.css("z-index","1");
+        
+        var $allBelow = $();
+        var cur;
+        for (var i=id+1; i < queue.length; i++) {
+            cur = document.getElementById("in"+i);
+            $(cur).css("z-index","0");
+            $allBelow = $allBelow.add(cur);
+        }
+        
+        var numBelow = queue.length - 1 - id;
+        $node.transition({y: numBelow*55}, 200);
+        $allBelow.each(function() {
+            $(this).transition({y: "-55"}, 200);
+        });
+        
+        $.when($node, $allBelow).done(function() {
+            this.setState({inQueue: queue}, this.saveState);
+            $node.css("y","0");
+            $allBelow.each(function() {
+                $(this).css("y","0");
+            });
+        }.bind(this));
+        
     },
     
     handleCharDelIn: function(id) {
         var queue = this.state.inQueue;
         var act = this.state.active;
         var newRound = this.state.round;
-        var doneAnim = $.Deferred();
+            
+        queue.splice(id, 1);
         
-        var delChar = $(document.getElementById("in" +id));
-        delChar.transition({opacity: 0}, 200, function() {
-            delChar.transition({height: 0}, 200, "ease", function() {
-                doneAnim.resolve();
-            });
-        });
+        if (id < act)
+            act--;
+        
+        if (act >= this.state.inQueue.length) {
+            act = 0;
+            if (this.state.inQueue.length === 0)
+                newRound = "-";
+        }
             
-        doneAnim.done(function() {
-            queue.splice(id, 1);
-            delChar.css("opacity","1");
-            delChar.css("height","auto");
+        var continueInit = false;
+        
+        if (this.state.inInit)    
+            continueInit = queue.length < 1 ? false : true;
             
-            if (act >= this.state.inQueue.length) {
-                act = 0;
-                newRound = 0;
-            }
-                
-            var continueInit = false;
-            
-            if (this.state.inInit)    
-                continueInit = queue.length < 1 ? false : true;
-                
-            this.setState({
-                inQueue: queue,
-                active: act,
-                inInit: continueInit,
-                round: newRound
-            }, this.saveState);
-        }.bind(this));
+        this.setState({
+            inQueue: queue,
+            active: act,
+            inInit: continueInit,
+            round: newRound
+        }, this.saveState);
     },
     
     handleCharDelOut: function(id) {
@@ -564,6 +618,15 @@ var app = React.createClass({
             newRound = 0;
         }
         
+        if (outQ.length === 1) {
+            var $node = $(document.getElementById("outQueue"));
+            $node.css("opacity","0");
+            $node.css("display","inline-block");
+            $node.slideDown(100, function() {
+                $node.transition({opacity: 1}, 100);
+            });
+        }
+        
         this.setState({
             inQueue: inQ,
             outQueue: outQ,
@@ -579,6 +642,13 @@ var app = React.createClass({
         inQ.push(outQ[id]);
         outQ.splice(id, 1);
         
+        if (outQ.length < 1) {
+            var $node = $(document.getElementById("outQueue"));
+            $node.transition({opacity: 0}, 100, function() {
+                $node.slideUp(100);
+            });
+        }
+        
         this.setState({
             inQueue: inQ,
             outQueue: outQ
@@ -593,7 +663,7 @@ var app = React.createClass({
             inQueue: queue,
             inInit: false,
             active: 0,
-            round: 0
+            round: "-"
         }, this.saveState);
     },
     
@@ -613,7 +683,7 @@ var app = React.createClass({
             outQueue: outQ,
             inInit: false,
             active: 0,
-            round: 0
+            round: "-"
         }, this.saveState);
         
     },
@@ -622,10 +692,10 @@ var app = React.createClass({
         if (this.state.inQueue.length > 0) {
             var state = !(this.state.inInit);
             if (state)
-                this.setState({inInit: state}, this.saveState);
+                this.setState({inInit: state, round: 1}, this.saveState);
             else
                 this.setState({inInit: state, 
-                               active: 0}, this.saveState);
+                               active: 0,}, this.saveState);
         }
     },
     
@@ -637,7 +707,7 @@ var app = React.createClass({
             act++;
             if (act >= this.state.inQueue.length) {
                 act = 0;
-                newRound = 0;               
+                newRound++;               
             }
                 
             this.setState({
@@ -645,26 +715,6 @@ var app = React.createClass({
                 round: newRound
             }, this.saveState);
         }
-    },
-    
-    handleReset: function() {
-        var inQ = this.state.inQueue;
-        var outQ = this.state.outQueue;
-        
-        for(var i=0; i<inQ.length; i++)
-            inQ[i].init = 10;
-        for(i=0; i<outQ.length; i++)
-            outQ[i].init = 10;
-            
-        this.setState({
-            inQueue: inQ,
-            outQueue: outQ,
-            inInit: false,
-            active: 0,
-            round: 0
-        });
-        
-        this.saveState();
     },
     
     handleClear: function() {
@@ -681,7 +731,7 @@ var app = React.createClass({
             outQueue: outQ,
             inInit: false,
             active: 0,
-            round: 0
+            round: "-"
         });
 
         this.saveState();
@@ -705,7 +755,8 @@ var app = React.createClass({
                 if(!this.state.addFocus) {
                     this.setState({
                         inInit: false,
-                        active: 0
+                        active: 0,
+                        round: "-"
                     }, this.saveState);
                 }
                 else
@@ -732,7 +783,8 @@ var app = React.createClass({
                     else {
                         this.setState({
                             inInit: true,
-                            active: 0
+                            active: 0,
+                            round: 1
                         }, this.saveState);
                     }
                 }
@@ -794,7 +846,6 @@ var app = React.createClass({
                              onGen={this.handleGen}
                              onStartStop={this.handleStartStop}
                              onNext={this.handleNext}
-                             onReset={this.handleReset}
                              onClear={this.handleClear}/>
                 <outQueueCmpt charList={this.state.outQueue}
                               onInitChange={this.handleInitChangeOut}

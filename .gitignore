@@ -20,3 +20,9 @@ img/next orig.png
 img/holdforward orig.png
 
 img/holdclock orig.png
+
+css/test.css
+
+*.bak
+
+transitiontest.html

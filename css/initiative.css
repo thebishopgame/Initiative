@@ -9,87 +9,6 @@ body {
     text-align: center;
 }
 
-.queueContainer {
-    -webkit-transform: translate3d(0, 0, 0);
-}
-
-.inChar {
-    position: relative;
-    background: #F3F3F3;
-    border-radius: 10px;
-    border: 2px solid black;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 0.25em;
-    font-family: Verdana, Arial, Sans-Serif;
-    -webkit-transform: translate3d(0, 0, 0);
-}
-
-.active {
-    background: #F39814; color: white;
-}
-
-.initdex {
-    float: right;
-    display: flex;
-    flex-direction: column;
-    align-content: flex-start;
-}
-
-.labelRow {
-    flex-shrink: 1;
-    height: 20px;
-    margin: auto;
-    font-size: 50%;
-}
-
-.controlRow {
-    height: 30px;
-    flex-shrink: 1;
-    margin: auto;
-    font-size: 50%;
-}
-
-.initInput {
-    width: 35px;
-    margin: 0 2px 0 2px;
-    font-size: 1em;
-}
-
-/*input[type=number] {*/
-/*    width: 35px;*/
-/*    height: 20px;*/
-/*    padding: 0;*/
-/*    margin: 2px;*/
-/*    font-size: .5em;*/
-/*}*/
-
-.charControls {
-    float: right;
-}
-
-button {
-    font-size: .65em;
-    vertical-align: middle;
-    position: relative;
-    top: -4px;
-    -webkit-appearance: square-button;
-    -moz-appearance: none;
-    border-radius: 0;
-    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-    background: -moz-linear-gradient(top,  #fff,  #ededed);
-}
-
-.controlimg {
-    width: 30px;
-    height: 30px;
-    position: relative;
-    top: 2px;
-    margin: 0 auto;
-    padding: 0;
-    resize: none;
-}
-
 .addCharContainer {
     display: block;
     font-family: Verdana, Arial, Sans-Serif;
@@ -117,6 +36,71 @@ input[type=text] {
     top: -2px;
 }
 
+.inQueueContainer {
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+.initChar {
+    position: relative;
+    background: #F3F3F3;
+    border-radius: 10px;
+    border: 2px solid black;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 0.25em;
+    font-family: Verdana, Arial, Sans-Serif;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+.active {
+    background: #F39814; color: white;
+}
+
+.initdex {
+    float: right;
+    position: relative;
+    top: -4px;
+}
+
+.labelRow {
+    font-size: 50%;
+}
+
+.controlRow {
+    font-size: 50%;
+}
+
+.initInput {
+    width: 35px;
+    margin: 0 2px 0 2px;
+    font-size: 1em;
+}
+
+.charControls {
+    float: right;
+}
+
+button {
+    font-size: .65em;
+    position: relative;
+    top: -4px;
+    -webkit-appearance: square-button;
+    -moz-appearance: none;
+    border-radius: 0;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+    background: -moz-linear-gradient(top,  #fff,  #ededed);
+}
+
+.controlimg {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 2px;
+    margin: 0 auto;
+    padding: 0;
+    resize: none;
+}
+
 .queue {
     margin: 10px;
     display: inline-block;
@@ -126,6 +110,7 @@ input[type=text] {
     border: 2px solid black;
     padding: 20px;
     width: 680px;
+    height: auto;
 }
 
 .directions {
@@ -177,7 +162,8 @@ input[type=text] {
 .initControl {
     position: relative;
     top: 7px;
-    vertical-align: middle;
+    height: 41px;
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .initControlButton {
