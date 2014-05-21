@@ -59,7 +59,7 @@ input[type=text] {
 .initdex {
     float: right;
     position: relative;
-    top: -4px;
+    top: -5px;
 }
 
 .labelRow {
@@ -72,33 +72,76 @@ input[type=text] {
 
 .initInput {
     width: 35px;
+    height: 17px;
     margin: 0 2px 0 2px;
     font-size: 1em;
 }
 
 .charControls {
     float: right;
+    position: relative;
+    top: -2px;
+    text-align: center;
+}
+
+.controlButton {
+    width: 46px;
+    height: 43px;
+    margin: 1px;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    padding: 0 0 0 0;
+    border: 0;
+}
+
+.up {
+    background-image: url("img/uparrow.png");
+}
+
+.down {
+    background-image: url("img/downarrow.png");
+}
+
+.hold {
+    background-image: url("img/holdclock.png");
+}
+
+.del {
+    background-image: url("img/redx.png");
+}
+
+.pause {
+    background-image: url("img/pause.png");
+}
+
+.play {
+    background-image: url("img/play.png");
 }
 
 button {
     font-size: .65em;
-    position: relative;
-    top: -4px;
     -webkit-appearance: square-button;
-    -moz-appearance: none;
     border-radius: 0;
     background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-    background: -moz-linear-gradient(top,  #fff,  #ededed);
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #FFFFFF),
+        color-stop(1, #EDEDED)
+    );
+    background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
+    background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
+    background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
+    background-image: linear-gradient(to bottom, #FFFFFF 0%, #EDEDED 100%);
 }
 
-.controlimg {
-    width: 30px;
-    height: 30px;
-    position: relative;
-    top: 2px;
-    margin: 0 auto;
-    padding: 0;
-    resize: none;
+button::-moz-focus-inner {
+    border:0;
+    padding:0;
 }
 
 .queue {
@@ -145,11 +188,9 @@ button {
     height: 1em;
 }
 
-.control {
-    width: 46px;
-    height: 42px;
-    margin: 1px;
-    padding: 0;
+.initControlSpacer {
+    display: inline-block;
+    width: 25px;
 }
 
 .dirimg {

@@ -131,20 +131,15 @@ var inChar = React.createClass({
             <div id={id} className={actClass}>
                 {this.props.charName}
                 <div className="charControls">
-                    <button ref="up" onClick={this.handleUp}>
-                        <img className="controlimg" src="img/uparrow.png" />
+                    <button className="controlButton up" ref="up" onClick={this.handleUp}>
                     </button>
-                    <button ref="down" onClick={this.handleDown}>
-                        <img className="controlimg" src="img/downarrow.png" />
+                    <button className="controlButton down" ref="down" onClick={this.handleDown}>
                     </button>
-                    <button ref="hold" onClick={this.handleHold}>
-                        <img className="controlimg" src="img/holdclock.png" />
+                    <button className="controlButton hold" ref="hold" onClick={this.handleHold}>
                     </button>
-                    <button ref="del" onClick={this.handleDel}>
-                        <img className="controlimg" src="img/redx.png" />
+                    <button className="controlButton del" ref="del" onClick={this.handleDel}>
                     </button>
-                    <button ref="pause" onClick={this.handlePause}>
-                        <img className="controlimg" src="img/pause.png" />
+                    <button className="controlButton pause" ref="pause" onClick={this.handlePause}>
                     </button>
                 </div>
                 <div className="initdex">
@@ -224,10 +219,10 @@ var outChar = React.createClass({
         return (
             <div className="initChar">{this.props.charName}
                 <div className="charControls">
-                    <button className="control play" onClick={this.handlePlay}>
+                    <button className="controlButton play" onClick={this.handlePlay}>
                         <img className="controlimg" src="img/play.png" />
                     </button>
-                    <button className="control delete" onClick={this.handleDel}>
+                    <button className="controlButton del" onClick={this.handleDel}>
                         <img className="controlimg" src="img/redx.png" />
                     </button>
                 </div>
@@ -329,12 +324,12 @@ var inQueueCmpt = React.createClass({
                             ref="gen"
                             onClick={this.handleGen}>
                         Generate
-                    </button>&nbsp;&nbsp;
+                    </button><div className="initControlSpacer"/>
                     <button className='initControlButton'
                             ref="sort"
                             onClick={this.handleSort}>
                         Sort
-                    </button>&nbsp;&nbsp;
+                    </button><div className="initControlSpacer"/>
                     <button className='initControlButtonStartStop'
                             ref="startstop"
                             onClick={this.handleStartStop}>
@@ -344,7 +339,7 @@ var inQueueCmpt = React.createClass({
                             ref="next"
                             onClick={this.handleNext}>
                         Next
-                    </button>&nbsp;&nbsp;
+                    </button><div className="initControlSpacer"/>
                     <button className='initControlButton'
                             ref="clear"
                             onClick={this.handleClear}>
