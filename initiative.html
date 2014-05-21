@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <title>thebishopgame's Initiative Tracker</title>
+        <link rel='stylesheet' type='text/css' href='css/initiative.css'/>
+        <script src="dep/jquery-1.11.0.min.js"></script>
+        <script src="dep/jquery.transit.min.js"></script>
+        <script src="dep/react-with-addons.min.js"></script>
+        <!--<script src="dep/JSXTransformer.js"></script>-->
+    </head>
+    <body>
+        <div class="main">
+            <div class="title">INITIATIVE</div>
+            <div class="spacer"></div>
+            <div id="appContainer"></div>
+            <div class='directions'>
+                <ul class='dirlist'>
+                    <li>Enter unique names for all entities in initiative.
+                    <li>Set their initiative bonus dexterity attributes
+                    <li>Use tab to quickly switch between edit fields
+                    <li>Click 'Generate' to randomize initiative create an order
+                    <li>Hit 'Sort' to restablish initiative order
+                    <li>Hit 'Start' or spacebar to begin counting initiative
+                    <li>Use 'Next' or spacebar to iterate
+                    <li>Use <img class=dirimg src=img/uparrow.png> and <img class=dirimg src=img/downarrow.png> to change order
+                    <li>Use <img class=dirimg src=img/holdclock.png> to drop an entry to the end of the queue (hold their turn)
+                    <li>Use <img class=dirimg src=img/pause.png> to remove someone from initiative and <img class=dirimg src=img/play.png> to bring them back in (at the end of the queue)
+                    <li>'Clear' will delete all entries
+                    <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative
+                </ul>
+            </div>
+        </div>
+        <script src="build/initiative.js"></script>
+    </body>
+</html>
