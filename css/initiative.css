@@ -80,7 +80,7 @@ input[type=text] {
 .charControls {
     float: right;
     position: relative;
-    top: -2px;
+    top: -4px;
     text-align: center;
 }
 
@@ -98,27 +98,27 @@ input[type=text] {
 }
 
 .up {
-    background-image: url("img/uparrow.png");
+    background-image: url("../img/uparrow.png");
 }
 
 .down {
-    background-image: url("img/downarrow.png");
+    background-image: url("../img/downarrow.png");
 }
 
 .hold {
-    background-image: url("img/holdclock.png");
+    background-image: url("../img/holdclock.png");
 }
 
 .del {
-    background-image: url("img/redx.png");
+    background-image: url("../img/redx.png");
 }
 
 .pause {
-    background-image: url("img/pause.png");
+    background-image: url("../img/pause.png");
 }
 
 .play {
-    background-image: url("img/play.png");
+    background-image: url("../img/play.png");
 }
 
 button {

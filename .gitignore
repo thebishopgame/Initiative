@@ -3,26 +3,8 @@
 
 tags
 
-test.html
-
-test.js
-
-img/uparrow orig.png
-
-img/redx orig.png
-
-img/play orig.png
-
-img/pause orig.png
-
-img/next orig.png
-
-img/holdforward orig.png
-
-img/holdclock orig.png
-
-css/test.css
-
 *.bak
 
-transitiontest.html
+build/.module-cache/*
+
+img/orig/*

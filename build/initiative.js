@@ -131,20 +131,15 @@ var inChar = React.createClass({displayName: 'inChar',
             React.DOM.div( {id:id, className:actClass}, 
                 this.props.charName,
                 React.DOM.div( {className:"charControls"}, 
-                    React.DOM.button( {className:"controlButton", ref:"up", onClick:this.handleUp}, 
-                        React.DOM.img( {className:"controlimg", src:"img/uparrow.png"} )
+                    React.DOM.button( {className:"controlButton up", ref:"up", onClick:this.handleUp}
                     ),
-                    React.DOM.button( {className:"controlButton", ref:"down", onClick:this.handleDown}, 
-                        React.DOM.img( {className:"controlimg", src:"img/downarrow.png"} )
+                    React.DOM.button( {className:"controlButton down", ref:"down", onClick:this.handleDown}
                     ),
-                    React.DOM.button( {className:"controlButton", ref:"hold", onClick:this.handleHold}, 
-                        React.DOM.img( {className:"controlimg", src:"img/holdclock.png"} )
+                    React.DOM.button( {className:"controlButton hold", ref:"hold", onClick:this.handleHold}
                     ),
-                    React.DOM.button( {className:"controlButton", ref:"del", onClick:this.handleDel}, 
-                        React.DOM.img( {className:"controlimg", src:"img/redx.png"} )
+                    React.DOM.button( {className:"controlButton del", ref:"del", onClick:this.handleDel}
                     ),
-                    React.DOM.button( {className:"controlButton", ref:"pause", onClick:this.handlePause}, 
-                        React.DOM.img( {className:"controlimg", src:"img/pause.png"} )
+                    React.DOM.button( {className:"controlButton pause", ref:"pause", onClick:this.handlePause}
                     )
                 ),
                 React.DOM.div( {className:"initdex"}, 
@@ -224,11 +219,9 @@ var outChar = React.createClass({displayName: 'outChar',
         return (
             React.DOM.div( {className:"initChar"}, this.props.charName,
                 React.DOM.div( {className:"charControls"}, 
-                    React.DOM.button( {className:"controlButton play", onClick:this.handlePlay}, 
-                        React.DOM.img( {className:"controlimg", src:"img/play.png"} )
+                    React.DOM.button( {className:"controlButton play", onClick:this.handlePlay}
                     ),
-                    React.DOM.button( {className:"controlButton delete", onClick:this.handleDel}, 
-                        React.DOM.img( {className:"controlimg", src:"img/redx.png"} )
+                    React.DOM.button( {className:"controlButton del", onClick:this.handleDel}
                     )
                 ),
                 React.DOM.div( {className:"initdex"}, 

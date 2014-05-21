@@ -220,10 +220,8 @@ var outChar = React.createClass({
             <div className="initChar">{this.props.charName}
                 <div className="charControls">
                     <button className="controlButton play" onClick={this.handlePlay}>
-                        <img className="controlimg" src="img/play.png" />
                     </button>
                     <button className="controlButton del" onClick={this.handleDel}>
-                        <img className="controlimg" src="img/redx.png" />
                     </button>
                 </div>
                 <div className="initdex">
