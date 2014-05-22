@@ -9,6 +9,16 @@ body {
     text-align: center;
 }
 
+.title {
+    color: white;
+    font-size: 2em;
+    letter-spacing: .4em;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+    left: +.2em;
+}
+
 .addCharContainer {
     display: block;
     font-family: Verdana, Arial, Sans-Serif;
@@ -17,13 +27,21 @@ body {
     border: 1px solid black;
     margin: 0 auto;
     margin-bottom: 7px;
-    padding: 0;
+    padding-top: 2px;
     font-size: 1em;
     width: 520px;
 }
 
 .addCharForm {
     display: inline;
+}
+
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 input[type=text] {
@@ -36,11 +54,21 @@ input[type=text] {
     top: -2px;
 }
 
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .inQueueContainer {
     -webkit-transform: translate3d(0, 0, 0);
 }
 
-.initChar {
+.initCharContainer {
     position: relative;
     background: #F3F3F3;
     border-radius: 10px;
@@ -54,6 +82,11 @@ input[type=text] {
 
 .active {
     background: #F39814; color: white;
+}
+
+.charName {
+    display: inline-block;
+    position: relative;
 }
 
 .initdex {
@@ -72,9 +105,11 @@ input[type=text] {
 
 .initInput {
     width: 35px;
-    height: 17px;
+    height: 22px;
     margin: 0 2px 0 2px;
+    padding: 0;
     font-size: 1em;
+    text-align: center;
 }
 
 .charControls {
@@ -94,7 +129,8 @@ input[type=text] {
     background-position: 50% 50%;
     background-repeat: no-repeat;
     padding: 0 0 0 0;
-    border: 0;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 .up {
@@ -121,22 +157,41 @@ input[type=text] {
     background-image: url("../img/play.png");
 }
 
+.initControlBar {
+    position: relative;
+    top: 7px;
+    height: 41px;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+.initControlButton {
+    display: inline-block;
+    height: 37px;
+    margin: 2px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+}
+
+.StartStop {
+    width: 65px;
+}
+
+.addButton {
+    position: relative;
+    top: -3px;
+}
+
 button {
     font-size: .65em;
-    -webkit-appearance: square-button;
+    -webkit-appearance: none;
     border-radius: 0;
-    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-    background: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #FFFFFF),
-        color-stop(1, #EDEDED)
-    );
-    background-image: -o-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
-    background-image: -moz-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
-    background-image: -ms-linear-gradient(bottom, #FFFFFF 0%, #EDEDED 100%);
-    background-image: linear-gradient(to bottom, #FFFFFF 0%, #EDEDED 100%);
+    padding: 0;
+    background: white;
 }
 
 button::-moz-focus-inner {
@@ -154,6 +209,11 @@ button::-moz-focus-inner {
     padding: 20px;
     width: 680px;
     height: auto;
+}
+
+h2 {
+    text-align: center;
+    margin: 5px;
 }
 
 .directions {
@@ -174,23 +234,13 @@ button::-moz-focus-inner {
     margin: .5em;
 }
 
-.title {
-    color: white;
-    font-size: 2em;
-    letter-spacing: .4em;
-    text-align: center;
-    margin: 0 auto;
-    position: relative;
-    left: +.2em;
-}
-
 .spacer {
     height: 1em;
 }
 
 .initControlSpacer {
     display: inline-block;
-    width: 25px;
+    width: 15px;
 }
 
 .dirimg {
@@ -198,28 +248,6 @@ button::-moz-focus-inner {
     height: 15px;
     position: relative;
     top: 2px;
-}
-
-.initControl {
-    position: relative;
-    top: 7px;
-    height: 41px;
-    -webkit-transform: translate3d(0, 0, 0);
-}
-
-.initControlButton {
-    height: 35px;
-    margin: 0 auto;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.initControlButtonStartStop {
-    height: 35px;
-    width: 65px;
-    margin: 0 auto;
-    padding-left: 5px;
-    padding-right: 5px;
 }
 
 .queueControlSpacer {

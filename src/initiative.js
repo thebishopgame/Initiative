@@ -46,7 +46,7 @@ var addCharBar = React.createClass({
                                      onFocus={this.handleFocus}
                                      onBlur={this.handleBlur}
                                      id="charNameInput"/>
-                    <button id="addButton">Add</button>
+                    <button className="initControlButton addButton">Add</button>
                 </form>
             </div>
         );
@@ -63,6 +63,20 @@ var inChar = React.createClass({
         $node.slideDown(100, function() {
             $node.transition({opacity: 1}, 100, cb);            
         });
+    },
+    componentDidEnter: function() {
+        var $node = $(this.refs.charName.getDOMNode());
+        if ($node.width() > 270) {
+            $node.css("font-size",".7em");
+            $node.css("top","-3px");
+        }
+    },
+    componentDidMount: function() {
+        var $node = $(this.refs.charName.getDOMNode());
+        if ($node.width() > 270) {
+            $node.css("font-size",".7em");
+            $node.css("top","-3px");
+        }
     },
     componentWillLeave: function(cb) {
         var $node = $(this.getDOMNode());
@@ -120,16 +134,16 @@ var inChar = React.createClass({
         }
     },
     render: function() {
+        var id = "in" + this.props.id;
+        
         var actClass = React.addons.classSet({
-            "initChar": true,
+            "initCharContainer": true,
             "active": this.props.inInit && (this.props.id === this.props.active)
         });
-    
-        var id = "in" + this.props.id;
-    
+        
         return (
             <div id={id} className={actClass}>
-                {this.props.charName}
+                <div ref="charName" className="charName">{this.props.charName}</div>
                 <div className="charControls">
                     <button className="controlButton up" ref="up" onClick={this.handleUp}>
                     </button>
@@ -217,7 +231,7 @@ var outChar = React.createClass({
     },
     render: function() {
         return (
-            <div className="initChar">{this.props.charName}
+            <div className="initCharContainer">{this.props.charName}
                 <div className="charControls">
                     <button className="controlButton play" onClick={this.handlePlay}>
                     </button>
@@ -317,7 +331,7 @@ var inQueueCmpt = React.createClass({
                 <ReactTransitionGroup>
                     {chars}
                 </ReactTransitionGroup>
-                <div className='initControl'>
+                <div className='initControlBar'>
                     <button className='initControlButton'
                             ref="gen"
                             onClick={this.handleGen}>
@@ -328,7 +342,7 @@ var inQueueCmpt = React.createClass({
                             onClick={this.handleSort}>
                         Sort
                     </button><div className="initControlSpacer"/>
-                    <button className='initControlButtonStartStop'
+                    <button className='initControlButton StartStop'
                             ref="startstop"
                             onClick={this.handleStartStop}>
                         {startstop}
