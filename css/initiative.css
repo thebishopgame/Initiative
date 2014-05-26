@@ -213,38 +213,38 @@ button::-moz-focus-inner {
 
 .directions {
     position: fixed;
-    top: 200px;
+    top: 50px;
     left: -10px;
-    font-size: .4em;
+    font-size: .5em;
     text-align: left;
     font-family: Verdana, Arial, Sans-Serif;
     background: #FFFFFF;
     border-radius: 10px;
     border: 1px solid black;
     padding: 0;
-    max-width: 350px;
+    min-width: 40px;
+    max-width: 400px;
     float: left;
     z-index: 2;
     display: inline-block;
 }
 
-.directions > h2 {
+.dirheader {
     text-align: center;
+    font-size: 1.1em;
     padding: 10px;
-    width: 10px;
-    word-wrap: break-word;
     display: inline-block;
     float: right;
     position: relative;
-    /*right: 2px;*/
+    margin: 5px;
 }
 
 .dirlist {
     position: relative;
     left: -10px;
+    top: 7px;
     margin: .5em;
     display: none;
-    /*width: 0;*/
 }
 
 .spacer {

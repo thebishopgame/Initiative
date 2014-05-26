@@ -4,7 +4,7 @@
         <title>thebishopgame's Initiative Tracker</title>
         <link rel='stylesheet' type='text/css' href='css/initiative.css'/>
         <script src="dep/jquery-1.11.0.min.js"></script>
-        <!--<script src="dep/jquery-ui-1.10.4.min.js"></script>-->
+        <script src="dep/jquery-ui-1.10.4.min.js"></script>
         <script src="dep/jquery.transit.min.js"></script>
         <script src="dep/react-with-addons.min.js"></script>
         <!--<script src="dep/JSXTransformer.js"></script>-->
@@ -26,18 +26,23 @@
                     <li>Use <img class=dirimg src=img/holdclock.png> to drop an entry to the end of the queue (hold their turn)
                     <li>Use <img class=dirimg src=img/pause.png> to remove someone from initiative and <img class=dirimg src=img/play.png> to bring them back in (at the end of the queue)
                     <li>'Clear' will delete all entries
-                    <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative
+                    <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative<br/>&nbsp</li>
+                    <li>"a" = Highlight Add Character
+                    <li>"g" = Generate
+                    <li>"s" = Sort
+                    <li>"space" = Start/advance initiative
+                    <li>"esc" = End initiative/deselect field
+                    <li>"enter" = Add character (when selected)
                 </ul>
-                <h2 id="dirheader">Directions</h2>
+                <div class="dirheader" id="dirheader">Directions</div><br/>
             </div>
             <div id="appContainer"></div>
         </div>
         <script src="build/initiative.js"></script>
         <script>
             $(document.getElementById("directions")).click(function() {
+                
                 $(document.getElementById("dirheader")).toggle();
-                // $(document.getElementById("directions")).transition({width: "250px"}, 100);
-                // $(document.getElementById("directions")).transition({height: "370px"}, 100);
                 $(document.getElementById("dirlist")).toggle();
             });
             // function() {
