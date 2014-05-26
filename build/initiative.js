@@ -170,7 +170,7 @@ var inChar = React.createClass({displayName: 'inChar',
                                max:"99", 
                                className:"initInput", 
                                value:this.props.init,
-                               id:this.props.id}),
+                               id:"init"+this.props.id}),
                         React.DOM.input( {type:"number",
                                onChange:this.handleBonusChange,
                                ref:"bonus",
@@ -178,7 +178,8 @@ var inChar = React.createClass({displayName: 'inChar',
                                min:"-99", 
                                max:"99", 
                                className:"initInput", 
-                               value:this.props.bonus}),
+                               value:this.props.bonus,
+                               id:"bonus"+this.props.id}),
                         React.DOM.input( {type:"number",
                                onChange:this.handleDexChange,
                                ref:"dex",
@@ -186,7 +187,8 @@ var inChar = React.createClass({displayName: 'inChar',
                                min:"0", 
                                max:"99", 
                                className:"initInput", 
-                               value:this.props.dex})
+                               value:this.props.dex,
+                               id:"dex"+this.props.id})
                     )
                 )
             )
@@ -750,10 +752,25 @@ var app = React.createClass({displayName: 'app',
                 e.preventDefault();
                 
                 var curFocus = this.state.focused;
-                if (++curFocus >= this.state.inQueue.length)
+                if (++curFocus >= (this.state.inQueue.length * 3))
                     curFocus = 0;
+                
+                var focusId;
+                switch(curFocus % 3) {
+                    case 0:
+                        focusId = "init"+Math.floor(curFocus/3);
+                        break;
                     
-                document.getElementById(curFocus).focus();
+                    case 1:
+                        focusId = "bonus"+Math.floor(curFocus/3);
+                        break;
+                        
+                    case 2:
+                        focusId = "dex"+Math.floor(curFocus/3);
+                        break;
+                        
+                }
+                document.getElementById(focusId).focus();
                     
                 this.setState({focused: curFocus}, this.saveState);
                 break;
