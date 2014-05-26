@@ -386,6 +386,8 @@ var outQueueCmpt = React.createClass({displayName: 'outQueueCmpt',
                             charName:char.charName});
         }.bind(this));
         
+        var hide = this.props.charList.length === 0 ? {display: "none"} : {display: "inline-block"};
+        
         return (
             React.DOM.div( {id:"outQueue", className:"queue"}, 
                 ReactTransitionGroup(null, 
@@ -610,6 +612,13 @@ var app = React.createClass({displayName: 'app',
         var queue = this.state.outQueue;
         queue.splice(id, 1);
         
+        if (queue.length < 1) {
+            var $node = $(document.getElementById("outQueue"));
+            $node.transition({opacity: 0}, 100, function() {
+                $node.slideUp(100);
+            });
+        }
+        
         this.setState({outQueue: queue}, this.saveState);
     },
     
@@ -624,7 +633,6 @@ var app = React.createClass({displayName: 'app',
         
         if (act >= this.state.inQueue.length) {
             act = 0;
-            newRound = 0;
         }
         
         if (outQ.length === 1) {
@@ -704,7 +712,9 @@ var app = React.createClass({displayName: 'app',
                 this.setState({inInit: state, round: 1}, this.saveState);
             else
                 this.setState({inInit: state, 
-                               active: 0,}, this.saveState);
+                               active: 0,
+                               round: "-"
+                }, this.saveState);
         }
     },
     
@@ -734,6 +744,13 @@ var app = React.createClass({displayName: 'app',
             inQ.pop();
         while(outQ.length > 0)
             outQ.pop();
+            
+        if (outQ.length < 1) {
+            var $node = $(document.getElementById("outQueue"));
+            $node.transition({opacity: 0}, 100, function() {
+                $node.slideUp(100);
+            });
+        }
             
         this.setState({
             inQueue: inQ,

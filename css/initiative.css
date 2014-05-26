@@ -81,7 +81,7 @@ input::-webkit-outer-spin-button {
 }
 
 .active {
-    background: #F39814; color: white;
+    background: #FF8314; color: white;
 }
 
 .charName {
@@ -211,10 +211,8 @@ button::-moz-focus-inner {
     height: auto;
 }
 
-.directions {
+.directions, .donate {
     position: fixed;
-    top: 50px;
-    left: -10px;
     font-size: .5em;
     text-align: left;
     font-family: Verdana, Arial, Sans-Serif;
@@ -224,10 +222,31 @@ button::-moz-focus-inner {
     padding: 0;
     min-width: 120px;
     max-width: 400px;
-    min-height: 52px;
     float: left;
-    z-index: 2;
     display: inline-block;
+}
+
+.directions {
+    top: 90px;
+    left: -10px;
+    min-height: 52px;
+    z-index: 2;
+}
+
+.donate {
+    top: 50px;
+    left: -10px;
+    text-align: center;
+    height: 30px;
+}
+
+.donateSubmit {
+    background: #FFFFFF;
+    border: 0;
+    font-size: 1em;
+    font-style: italic;
+    position: relative;
+    top: 2px;
 }
 
 .dirheader {
