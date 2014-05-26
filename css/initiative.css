@@ -211,27 +211,40 @@ button::-moz-focus-inner {
     height: auto;
 }
 
-h2 {
-    text-align: center;
-    margin: 5px;
-}
-
 .directions {
-    font-size: .5em;
+    position: fixed;
+    top: 200px;
+    left: -10px;
+    font-size: .4em;
     text-align: left;
-    margin: 10px;
-    display: inline-block;
     font-family: Verdana, Arial, Sans-Serif;
     background: #FFFFFF;
     border-radius: 10px;
     border: 1px solid black;
     padding: 0;
-    width: 520px;
+    max-width: 350px;
+    float: left;
+    z-index: 2;
+    display: inline-block;
+}
+
+.directions > h2 {
+    text-align: center;
+    padding: 10px;
+    width: 10px;
+    word-wrap: break-word;
+    display: inline-block;
+    float: right;
+    position: relative;
+    /*right: 2px;*/
 }
 
 .dirlist {
-    list-style-position: outside;
+    position: relative;
+    left: -10px;
     margin: .5em;
+    display: none;
+    /*width: 0;*/
 }
 
 .spacer {

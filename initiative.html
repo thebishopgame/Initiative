@@ -4,6 +4,7 @@
         <title>thebishopgame's Initiative Tracker</title>
         <link rel='stylesheet' type='text/css' href='css/initiative.css'/>
         <script src="dep/jquery-1.11.0.min.js"></script>
+        <!--<script src="dep/jquery-ui-1.10.4.min.js"></script>-->
         <script src="dep/jquery.transit.min.js"></script>
         <script src="dep/react-with-addons.min.js"></script>
         <!--<script src="dep/JSXTransformer.js"></script>-->
@@ -12,10 +13,8 @@
         <div class="main">
             <div class="title">INITIATIVE</div>
             <div class="spacer"></div>
-            <div id="appContainer"></div>
-            <div class='directions'>
-                <h2>Directions</h2>
-                <ul class='dirlist'>
+            <div class='directions' id='directions'>
+                <ul class='dirlist' id="dirlist">
                     <li>Enter unique names for all entities in initiative.
                     <li>Set their initiative bonus dexterity attributes
                     <li>Use tab to quickly switch between edit fields
@@ -29,8 +28,24 @@
                     <li>'Clear' will delete all entries
                     <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative
                 </ul>
+                <h2 id="dirheader">Directions</h2>
             </div>
+            <div id="appContainer"></div>
         </div>
         <script src="build/initiative.js"></script>
+        <script>
+            $(document.getElementById("directions")).click(function() {
+                $(document.getElementById("dirheader")).toggle();
+                // $(document.getElementById("directions")).transition({width: "250px"}, 100);
+                // $(document.getElementById("directions")).transition({height: "370px"}, 100);
+                $(document.getElementById("dirlist")).toggle();
+            });
+            // function() {
+            //     $(document.getElementById("dirlist")).transition({width: 0}, 100, function() {
+            //         $(document.getElementById("dirlist")).css("display","none");
+            //         $(document.getElementById("dirheader")).fadeIn(100)
+            //     });
+            // });
+        </script>
     </body>
 </html>
