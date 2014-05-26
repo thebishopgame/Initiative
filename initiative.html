@@ -26,7 +26,8 @@
                     <li>Use <img class=dirimg src=img/holdclock.png> to drop an entry to the end of the queue (hold their turn)
                     <li>Use <img class=dirimg src=img/pause.png> to remove someone from initiative and <img class=dirimg src=img/play.png> to bring them back in (at the end of the queue)
                     <li>'Clear' will delete all entries
-                    <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative<br/>&nbsp</li>
+                    <li>Hit 'Stop' or esc to exit initiative. Sorting, generating, and clearing will also end Initiative
+                    <li>Don't worry about having to re-enter characrters and stats for each session, the tracker will hold it's state as long as you don't clear your browser data!<br/>&nbsp</li>
                     <li>"a" = Highlight Add Character
                     <li>"g" = Generate
                     <li>"s" = Sort
@@ -40,10 +41,27 @@
         </div>
         <script src="build/initiative.js"></script>
         <script>
-            $(document.getElementById("directions")).click(function() {
+            var $directions = $(document.getElementById("directions"));
+            var $dirheader = $(document.getElementById("dirheader"));
+            var $dirlist = $(document.getElementById("dirlist"));
+            
+            $directions.click(function() {
+                if($directions.data("clicked" !== undefined)) {
+                    var clicked = $directions.data("clicked") === 1 ? 0 : 1;
+                    $directions.data("clicked", clicked);
+                }
+                else {
+                    $directions.data("clicked", 1);
+                }
                 
-                $(document.getElementById("dirheader")).toggle();
-                $(document.getElementById("dirlist")).toggle();
+                if ($directions.data("clicked")) {
+                    $dirlist.toggle(function () {});
+                    $dirheader.fadeToggle(200);
+                }
+                else {
+                    $dirlist.toggle(function() {});
+                    $dirheader.fadeToggle(400);
+                }
             });
             // function() {
             //     $(document.getElementById("dirlist")).transition({width: 0}, 100, function() {

@@ -222,8 +222,9 @@ button::-moz-focus-inner {
     border-radius: 10px;
     border: 1px solid black;
     padding: 0;
-    min-width: 40px;
+    min-width: 120px;
     max-width: 400px;
+    min-height: 52px;
     float: left;
     z-index: 2;
     display: inline-block;
