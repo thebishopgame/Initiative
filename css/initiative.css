@@ -212,7 +212,7 @@ button::-moz-focus-inner {
 }
 
 .directions, .donate {
-    position: fixed;
+    position: absolute;
     font-size: .5em;
     text-align: left;
     font-family: Verdana, Arial, Sans-Serif;
