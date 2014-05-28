@@ -64,10 +64,6 @@ input::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.inQueueContainer {
-    -webkit-transform: translate3d(0, 0, 0);
-}
-
 .initCharContainer {
     position: relative;
     background: #F3F3F3;
@@ -77,7 +73,6 @@ input::-webkit-outer-spin-button {
     margin-bottom: 3px;
     padding: 0.25em;
     font-family: Verdana, Arial, Sans-Serif;
-    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .active {
@@ -161,7 +156,6 @@ input::-webkit-outer-spin-button {
     position: relative;
     top: 7px;
     height: 41px;
-    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .initControlButton {
@@ -285,5 +279,4 @@ button::-moz-focus-inner {
 
 .queueControlSpacer {
     height: 0;
-    -webkit-transform: translate3d(0, 0, 0);
 }

@@ -693,7 +693,8 @@ var app = React.createClass({displayName: 'app',
         for(i=0; i<outQ.length; i++)
             outQ[i].init = Math.floor((Math.random() * 20) + 1);
             
-        this.handleSort();
+        inQ.sort(compareInit);
+        console.log(inQ);
         
         this.setState({
             inQueue: inQ,
@@ -702,7 +703,6 @@ var app = React.createClass({displayName: 'app',
             active: 0,
             round: "-"
         }, this.saveState);
-        
     },
     
     handleStartStop: function() {
