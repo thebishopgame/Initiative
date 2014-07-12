@@ -3,8 +3,8 @@
 
 function compareInit(a,b)
 {
-    var aInit = parseInt(a.init) + parseInt(a.mod);
-    var bInit = parseInt(b.init) + parseInt(b.mod);
+    var aInit = parseInt(a.roll) + parseInt(a.mod);
+    var bInit = parseInt(b.roll) + parseInt(b.mod);
     
     if (aInit < bInit)
         return 1;
@@ -110,8 +110,8 @@ var inChar = React.createClass({
         this.props.onCharPause(this.props.id);
         return false;
     },
-    handleInitChange: function() {
-        this.props.onInitChange(this.props.id, this.refs.init.getDOMNode().value);
+    handleRollChange: function() {
+        this.props.onRollChange(this.props.id, this.refs.roll.getDOMNode().value);
     },
     handleModChange: function() {
         this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
@@ -119,11 +119,11 @@ var inChar = React.createClass({
     handleKeyDown: function(e) {
         switch(parseInt(e.keyCode)) {
             case 13:
-                this.refs.init.getDOMNode().blur();
+                this.refs.roll.getDOMNode().blur();
                 break;
             
             case 27:
-                this.refs.init.getDOMNode().blur();
+                this.refs.roll.getDOMNode().blur();
                 break;
             
             default:
@@ -159,15 +159,15 @@ var inChar = React.createClass({
                     </div>
                     <div className="controlRow">
                         <input type="number" 
-                               onChange={this.handleInitChange}
+                               onChange={this.handleRollChange}
                                onKeyDown={this.handleKeyDown}
-                               ref="init"
+                               ref="roll"
                                maxlength="2" 
                                min="0" 
                                max="99" 
                                className="initInput" 
-                               value={this.props.init}
-                               id={"init"+this.props.id}/>
+                               value={this.props.roll}
+                               id={"roll"+this.props.id}/>
                         <input type="number"
                                onChange={this.handleModChange}
                                ref="mod"
@@ -210,8 +210,8 @@ var outChar = React.createClass({
         this.props.onCharDel(this.props.id);
         return false;
     },
-    handleInitChange: function() {
-        this.props.onInitChange(this.props.id, this.refs.init.getDOMNode().value);
+    handleRollChange: function() {
+        this.props.onRollChange(this.props.id, this.refs.roll.getDOMNode().value);
     },
     handleModChange: function() {
         this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
@@ -227,18 +227,18 @@ var outChar = React.createClass({
                 </div>
                 <div className="initdex">
                     <div className="labelRow">
-                        Init Mod
+                        Roll Mod
                     </div>
                     <div className="controlRow">
                         <input type="number" 
-                               onChange={this.handleInitChange}
+                               onChange={this.handleRollChange}
                                onKeyDown={this.handleKeyDown}
-                               ref="init"
+                               ref="roll"
                                maxlength="2" 
                                min="0" 
                                max="99" 
                                className="initInput" 
-                               value={this.props.init}
+                               value={this.props.roll}
                                id={this.props.id}/>
                         <input type="number"
                                onChange={this.handleModChange}
@@ -288,9 +288,9 @@ var inQueueCmpt = React.createClass({
             return <inChar key={char.charName}
                            id={i}
                            charName={char.charName}
-                           init={char.init}
+                           roll={char.roll}
                            mod={char.mod}
-                           onInitChange={this.props.onInitChange}
+                           onRollChange={this.props.onRollChange}
                            onModChange={this.props.onModChange}
                            onCharUp={this.props.onCharUp}
                            onCharDown={this.props.onCharDown}
@@ -351,9 +351,9 @@ var outQueueCmpt = React.createClass({
         var id = 0;
         var chars = this.props.charList.map(function(char) {
             return <outChar id={id++}
-                            init={char.init}
+                            roll={char.roll}
                             mod={char.mod}
-                            onInitChange={this.props.onInitChange}
+                            onRollChange={this.props.onRollChange}
                             onModChange={this.props.onModChange}
                             onCharPlay={this.props.onCharPlay}
                             onCharDel={this.props.onCharDel} 
@@ -399,22 +399,22 @@ var app = React.createClass({
     handleCharAdd: function(name) {
         if (name !== "") {
             var queue = this.state.inQueue;
-            queue.push({charName:name, init:10, mod:0});
+            queue.push({charName:name, roll:10, mod:0});
             this.setState({inQueue: queue}, this.saveState);
         }
     },
     
-    handleInitChangeIn: function(id, newInit) {
+    handleRollChangeIn: function(id, newRoll) {
         var queue = this.state.inQueue;
 
-        queue[id].init = newInit;
+        queue[id].roll = newRoll;
         this.setState({inQueue: queue}, this.saveState);
     },
     
-    handleInitChangeOut: function(id, newInit) {
+    handleRollChangeOut: function(id, newRoll) {
         var queue = this.state.outQueue;
         
-        queue[id].init = newInit;
+        queue[id].roll = newRoll;
         this.setState({outQueue: queue}, this.saveState);
     },
     
@@ -649,9 +649,9 @@ var app = React.createClass({
         var outQ = this.state.outQueue;
         
         for(var i=0; i<inQ.length; i++)
-            inQ[i].init = Math.floor((Math.random() * 20) + 1);
+            inQ[i].roll = Math.floor((Math.random() * 20) + 1);
         for(i=0; i<outQ.length; i++)
-            outQ[i].init = Math.floor((Math.random() * 20) + 1);
+            outQ[i].roll = Math.floor((Math.random() * 20) + 1);
             
         inQ.sort(compareInit);
         console.log(inQ);
@@ -735,7 +735,7 @@ var app = React.createClass({
                 var focusId;
                 switch(curFocus % 2) {
                     case 0:
-                        focusId = "init"+Math.floor(curFocus/2);
+                        focusId = "roll"+Math.floor(curFocus/2);
                         break;
                     
                     case 1:
@@ -830,7 +830,7 @@ var app = React.createClass({
                              active={this.state.active}
                              focused={this.state.focused}
                              round={this.state.round}
-                             onInitChange={this.handleInitChangeIn}
+                             onRollChange={this.handleRollChangeIn}
                              onModChange={this.handleModChangeIn}
                              onCharUp={this.handleCharUp}
                              onCharDown={this.handleCharDown}
@@ -843,7 +843,7 @@ var app = React.createClass({
                              onNext={this.handleNext}
                              onClear={this.handleClear}/>
                 <outQueueCmpt charList={this.state.outQueue}
-                              onInitChange={this.handleInitChangeOut}
+                              onRollChange={this.handleRollChangeOut}
                               onModChange={this.handleModChangeOut}
                               onCharPlay={this.handleCharPlay}
                               onCharDel={this.handleCharDelOut}/>
