@@ -195,13 +195,17 @@ button::-moz-focus-inner {
 
 .queue {
     margin: 10px;
-    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
     font-family: Verdana, Arial, Sans-Serif;
     background: #9B9B9B;
     border-radius: 10px;
     border: 2px solid black;
     padding: 20px;
-    width: 680px;
+    width: 60%;
+    min-width: 680px;
+    max-width: 896px;
     height: auto;
 }
 
