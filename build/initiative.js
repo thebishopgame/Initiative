@@ -3,8 +3,8 @@
 
 function compareInit(a,b)
 {
-    var aInit = parseInt(a.init) + parseInt(a.bonus);
-    var bInit = parseInt(b.init) + parseInt(b.bonus);
+    var aInit = parseInt(a.init) + parseInt(a.mod);
+    var bInit = parseInt(b.init) + parseInt(b.mod);
     
     if (aInit < bInit)
         return 1;
@@ -12,9 +12,9 @@ function compareInit(a,b)
         return -1;
     else
     {
-        if (a.dex < b.dex)
+        if (a.mod < b.mod)
             return 1;
-        else if (a.dex > b.dex)
+        else if (a.mod > b.mod)
             return -1;
     }
     return 0;
@@ -113,11 +113,8 @@ var inChar = React.createClass({displayName: 'inChar',
     handleInitChange: function() {
         this.props.onInitChange(this.props.id, this.refs.init.getDOMNode().value);
     },
-    handleBonusChange: function() {
-        this.props.onBonusChange(this.props.id, this.refs.bonus.getDOMNode().value);
-    },
-    handleDexChange: function() {
-        this.props.onDexChange(this.props.id, this.refs.dex.getDOMNode().value);
+    handleModChange: function() {
+        this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
     },
     handleKeyDown: function(e) {
         switch(parseInt(e.keyCode)) {
@@ -158,7 +155,7 @@ var inChar = React.createClass({displayName: 'inChar',
                 ),
                 React.DOM.div( {className:"initdex"}, 
                     React.DOM.div( {className:"labelRow"}, 
-                        "Init Bonus Dex"
+                        "Roll Mod"
                     ),
                     React.DOM.div( {className:"controlRow"}, 
                         React.DOM.input( {type:"number", 
@@ -172,23 +169,14 @@ var inChar = React.createClass({displayName: 'inChar',
                                value:this.props.init,
                                id:"init"+this.props.id}),
                         React.DOM.input( {type:"number",
-                               onChange:this.handleBonusChange,
-                               ref:"bonus",
+                               onChange:this.handleModChange,
+                               ref:"mod",
                                maxlength:"2", 
                                min:"-99", 
                                max:"99", 
                                className:"initInput", 
-                               value:this.props.bonus,
-                               id:"bonus"+this.props.id}),
-                        React.DOM.input( {type:"number",
-                               onChange:this.handleDexChange,
-                               ref:"dex",
-                               maxlength:"2", 
-                               min:"0", 
-                               max:"99", 
-                               className:"initInput", 
-                               value:this.props.dex,
-                               id:"dex"+this.props.id})
+                               value:this.props.mod,
+                               id:"mod"+this.props.id})
                     )
                 )
             )
@@ -223,13 +211,10 @@ var outChar = React.createClass({displayName: 'outChar',
         return false;
     },
     handleInitChange: function() {
-        this.props.onInitChange(this.refs.init.getDOMNode().value);
+        this.props.onInitChange(this.props.id, this.refs.init.getDOMNode().value);
     },
-    handleBonusChange: function() {
-        this.props.onBonusChange(this.refs.bonus.getDOMNode().value);
-    },
-    handleDexChange: function() {
-        this.props.onDexChange(this.refs.dex.getDOMNode().value);
+    handleModChange: function() {
+        this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
     },
     render: function() {
         return (
@@ -242,7 +227,7 @@ var outChar = React.createClass({displayName: 'outChar',
                 ),
                 React.DOM.div( {className:"initdex"}, 
                     React.DOM.div( {className:"labelRow"}, 
-                        "Init Bonus Dex"
+                        "Init Mod"
                     ),
                     React.DOM.div( {className:"controlRow"}, 
                         React.DOM.input( {type:"number", 
@@ -256,21 +241,14 @@ var outChar = React.createClass({displayName: 'outChar',
                                value:this.props.init,
                                id:this.props.id}),
                         React.DOM.input( {type:"number",
-                               onChange:this.handleBonusChange,
-                               ref:"bonus",
+                               onChange:this.handleModChange,
+                               ref:"mod",
                                maxlength:"2", 
                                min:"-99", 
                                max:"99", 
                                className:"initInput", 
-                               value:this.props.bonus}),
-                        React.DOM.input( {type:"number",
-                               onChange:this.handleDexChange,
-                               ref:"dex",
-                               maxlength:"2", 
-                               min:"0", 
-                               max:"99", 
-                               className:"initInput", 
-                               value:this.props.dex})
+                               value:this.props.mod,
+                               id:"mod"+this.props.id})
                     )
                 )
             )
@@ -311,11 +289,9 @@ var inQueueCmpt = React.createClass({displayName: 'inQueueCmpt',
                            id:i,
                            charName:char.charName,
                            init:char.init,
-                           bonus:char.bonus,
-                           dex:char.dex,
+                           mod:char.mod,
                            onInitChange:this.props.onInitChange,
-                           onBonusChange:this.props.onBonusChange,
-                           onDexChange:this.props.onDexChange,
+                           onModChange:this.props.onModChange,
                            onCharUp:this.props.onCharUp,
                            onCharDown:this.props.onCharDown,
                            onCharHold:this.props.onCharHold,
@@ -376,11 +352,9 @@ var outQueueCmpt = React.createClass({displayName: 'outQueueCmpt',
         var chars = this.props.charList.map(function(char) {
             return outChar( {id:id++,
                             init:char.init,
-                            bonus:char.bonus,
-                            dex:char.dex,
+                            mod:char.mod,
                             onInitChange:this.props.onInitChange,
-                            onBonusChange:this.props.onBonusChange,
-                            onDexChange:this.props.onDexChange,
+                            onModChange:this.props.onModChange,
                             onCharPlay:this.props.onCharPlay,
                             onCharDel:this.props.onCharDel, 
                             charName:char.charName});
@@ -425,7 +399,7 @@ var app = React.createClass({displayName: 'app',
     handleCharAdd: function(name) {
         if (name !== "") {
             var queue = this.state.inQueue;
-            queue.push({charName:name, init:10, bonus:0, dex:10});
+            queue.push({charName:name, init:10, mod:0});
             this.setState({inQueue: queue}, this.saveState);
         }
     },
@@ -444,31 +418,17 @@ var app = React.createClass({displayName: 'app',
         this.setState({outQueue: queue}, this.saveState);
     },
     
-    handleBonusChangeIn: function(id, newBonus) {
+    handleModChangeIn: function(id, newMod) {
         var queue = this.state.inQueue;
         
-        queue[id].bonus = newBonus;
+        queue[id].mod = newMod;
         this.setState({inQueue: queue}, this.saveState);
     },
     
-    handleBonusChangeOut: function(id, newBonus) {
+    handleModChangeOut: function(id, newMod) {
         var queue = this.state.outQueue;
         
-        queue[id].bonus = newBonus;
-        this.setState({outQueue: queue}, this.saveState);
-    },
-    
-    handleDexChangeIn: function(id, newDex) {
-        var queue = this.state.inQueue;
-        
-        queue[id].dex = newDex;
-        this.setState({inQueue: queue}, this.saveState);
-    },
-    
-    handleDexChangeOut: function(id, newDex) {
-        var queue = this.state.outQueue;
-        
-        queue[id].dex = newDex;
+        queue[id].mod = newMod;
         this.setState({outQueue: queue}, this.saveState);
     },
     
@@ -769,23 +729,18 @@ var app = React.createClass({displayName: 'app',
                 e.preventDefault();
                 
                 var curFocus = this.state.focused;
-                if (++curFocus >= (this.state.inQueue.length * 3))
+                if (++curFocus >= (this.state.inQueue.length * 2))
                     curFocus = 0;
                 
                 var focusId;
-                switch(curFocus % 3) {
+                switch(curFocus % 2) {
                     case 0:
-                        focusId = "init"+Math.floor(curFocus/3);
+                        focusId = "init"+Math.floor(curFocus/2);
                         break;
                     
                     case 1:
-                        focusId = "bonus"+Math.floor(curFocus/3);
+                        focusId = "mod"+Math.floor(curFocus/2);
                         break;
-                        
-                    case 2:
-                        focusId = "dex"+Math.floor(curFocus/3);
-                        break;
-                        
                 }
                 document.getElementById(focusId).focus();
                     
@@ -876,8 +831,7 @@ var app = React.createClass({displayName: 'app',
                              focused:this.state.focused,
                              round:this.state.round,
                              onInitChange:this.handleInitChangeIn,
-                             onBonusChange:this.handleBonusChangeIn,
-                             onDexChange:this.handleDexChangeIn,
+                             onModChange:this.handleModChangeIn,
                              onCharUp:this.handleCharUp,
                              onCharDown:this.handleCharDown,
                              onCharHold:this.handleCharHold,
@@ -890,8 +844,7 @@ var app = React.createClass({displayName: 'app',
                              onClear:this.handleClear}),
                 outQueueCmpt( {charList:this.state.outQueue,
                               onInitChange:this.handleInitChangeOut,
-                              onBonusChange:this.handleBonusChangeOut,
-                              onDexChange:this.handleDexChangeOut,
+                              onModChange:this.handleModChangeOut,
                               onCharPlay:this.handleCharPlay,
                               onCharDel:this.handleCharDelOut})
             )
