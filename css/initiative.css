@@ -84,14 +84,16 @@ input::-webkit-outer-spin-button {
     position: relative;
 }
 
-.initdex {
+.rollmodtotal {
     float: right;
     position: relative;
     top: -5px;
 }
 
 .labelRow {
+    position: relative;
     font-size: 50%;
+    left: -2px;
 }
 
 .controlRow {
@@ -204,7 +206,7 @@ button::-moz-focus-inner {
     border: 2px solid black;
     padding: 20px;
     width: 60%;
-    min-width: 680px;
+    min-width: 700px;
     max-width: 896px;
     height: auto;
 }

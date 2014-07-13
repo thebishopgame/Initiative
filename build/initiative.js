@@ -3,8 +3,8 @@
 
 function compareInit(a,b)
 {
-    var aInit = parseInt(a.roll) + parseInt(a.mod);
-    var bInit = parseInt(b.roll) + parseInt(b.mod);
+    var aInit = parseInt(a.total);
+    var bInit = parseInt(b.total);
     
     if (aInit < bInit)
         return 1;
@@ -116,6 +116,9 @@ var inChar = React.createClass({displayName: 'inChar',
     handleModChange: function() {
         this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
     },
+    handleTotalChange: function() {
+        this.props.onTotalChange(this.props.id, this.refs.total.getDOMNode().value);
+    },
     handleKeyDown: function(e) {
         switch(parseInt(e.keyCode)) {
             case 13:
@@ -153,11 +156,22 @@ var inChar = React.createClass({displayName: 'inChar',
                     React.DOM.button( {className:"controlButton pause", ref:"pause", onClick:this.handlePause}
                     )
                 ),
-                React.DOM.div( {className:"initdex"}, 
+                React.DOM.div( {className:"rollmodtotal"}, 
                     React.DOM.div( {className:"labelRow"}, 
-                        "Roll Mod"
+                        "Total   Roll    Mod"
                     ),
                     React.DOM.div( {className:"controlRow"}, 
+                        React.DOM.input( {type:"number", 
+                               onChange:this.handleTotalChange,
+                               onKeyDown:this.handleKeyDown,
+                               ref:"total",
+                               maxlength:"2", 
+                               min:"0", 
+                               max:"99", 
+                               className:"initInput", 
+                               value:this.props.total,
+                               id:"total"+this.props.id}),
+                               "=",
                         React.DOM.input( {type:"number", 
                                onChange:this.handleRollChange,
                                onKeyDown:this.handleKeyDown,
@@ -168,12 +182,13 @@ var inChar = React.createClass({displayName: 'inChar',
                                className:"initInput", 
                                value:this.props.roll,
                                id:"roll"+this.props.id}),
+                               "+",
                         React.DOM.input( {type:"number",
                                onChange:this.handleModChange,
                                ref:"mod",
                                maxlength:"2", 
                                min:"-99", 
-                               max:"99", 
+                               max:"99",
                                className:"initInput", 
                                value:this.props.mod,
                                id:"mod"+this.props.id})
@@ -216,6 +231,9 @@ var outChar = React.createClass({displayName: 'outChar',
     handleModChange: function() {
         this.props.onModChange(this.props.id, this.refs.mod.getDOMNode().value);
     },
+    handleTotalChange: function() {
+        this.props.onTotalChange(this.props.id, this.refs.total.getDOMNode().value);
+    },
     render: function() {
         return (
             React.DOM.div( {className:"initCharContainer"}, this.props.charName,
@@ -225,11 +243,22 @@ var outChar = React.createClass({displayName: 'outChar',
                     React.DOM.button( {className:"controlButton del", onClick:this.handleDel}
                     )
                 ),
-                React.DOM.div( {className:"initdex"}, 
+                React.DOM.div( {className:"rollmodtotal"}, 
                     React.DOM.div( {className:"labelRow"}, 
-                        "Roll Mod"
+                        "Total   Roll    Mod"
                     ),
                     React.DOM.div( {className:"controlRow"}, 
+                        React.DOM.input( {type:"number", 
+                               onChange:this.handleTotalChange,
+                               onKeyDown:this.handleKeyDown,
+                               ref:"total",
+                               maxlength:"2", 
+                               min:"0", 
+                               max:"99", 
+                               className:"initInput", 
+                               value:this.props.total,
+                               id:"total"+this.props.id}),
+                               "=",
                         React.DOM.input( {type:"number", 
                                onChange:this.handleRollChange,
                                onKeyDown:this.handleKeyDown,
@@ -239,7 +268,8 @@ var outChar = React.createClass({displayName: 'outChar',
                                max:"99", 
                                className:"initInput", 
                                value:this.props.roll,
-                               id:this.props.id}),
+                               id:"roll"+this.props.id}),
+                               "+",
                         React.DOM.input( {type:"number",
                                onChange:this.handleModChange,
                                ref:"mod",
@@ -290,8 +320,10 @@ var inQueueCmpt = React.createClass({displayName: 'inQueueCmpt',
                            charName:char.charName,
                            roll:char.roll,
                            mod:char.mod,
+                           total:char.total,
                            onRollChange:this.props.onRollChange,
                            onModChange:this.props.onModChange,
+                           onTotalChange:this.props.onTotalChange,
                            onCharUp:this.props.onCharUp,
                            onCharDown:this.props.onCharDown,
                            onCharHold:this.props.onCharHold,
@@ -353,8 +385,10 @@ var outQueueCmpt = React.createClass({displayName: 'outQueueCmpt',
             return outChar( {id:id++,
                             roll:char.roll,
                             mod:char.mod,
+                            total:char.total,
                             onRollChange:this.props.onRollChange,
                             onModChange:this.props.onModChange,
+                            onTotalChange:this.props.onTotalChange,
                             onCharPlay:this.props.onCharPlay,
                             onCharDel:this.props.onCharDel, 
                             charName:char.charName});
@@ -399,7 +433,7 @@ var app = React.createClass({displayName: 'app',
     handleCharAdd: function(name) {
         if (name !== "") {
             var queue = this.state.inQueue;
-            queue.push({charName:name, roll:10, mod:0});
+            queue.push({charName:name, roll:10, mod:0, total:0});
             this.setState({inQueue: queue}, this.saveState);
         }
     },
@@ -408,6 +442,7 @@ var app = React.createClass({displayName: 'app',
         var queue = this.state.inQueue;
 
         queue[id].roll = newRoll;
+        queue[id].total = parseInt(newRoll) + parseInt(queue[id].mod);
         this.setState({inQueue: queue}, this.saveState);
     },
     
@@ -415,6 +450,7 @@ var app = React.createClass({displayName: 'app',
         var queue = this.state.outQueue;
         
         queue[id].roll = newRoll;
+        queue[id].total = parseInt(newRoll) + parseInt(queue[id].mod);
         this.setState({outQueue: queue}, this.saveState);
     },
     
@@ -422,6 +458,7 @@ var app = React.createClass({displayName: 'app',
         var queue = this.state.inQueue;
         
         queue[id].mod = newMod;
+        queue[id].total = parseInt(newMod) + parseInt(queue[id].roll);
         this.setState({inQueue: queue}, this.saveState);
     },
     
@@ -429,6 +466,23 @@ var app = React.createClass({displayName: 'app',
         var queue = this.state.outQueue;
         
         queue[id].mod = newMod;
+        queue[id].total = parseInt(newMod) + parseInt(queue[id].roll);
+        this.setState({outQueue: queue}, this.saveState);
+    },
+
+    handleTotalChangeIn: function(id, newTotal) {
+        var queue = this.state.inQueue;
+        
+        queue[id].total = newTotal;
+        queue[id].roll = parseInt(newTotal) - parseInt(queue[id].mod);
+        this.setState({inQueue: queue}, this.saveState);
+    },
+    
+    handleTotalChangeOut: function(id, newTotal) {
+        var queue = this.state.outQueue;
+        
+        queue[id].total = newTotal;
+        queue[id].roll = parseInt(newTotal) - parseInt(queue[id].mod);
         this.setState({outQueue: queue}, this.saveState);
     },
     
@@ -649,9 +703,15 @@ var app = React.createClass({displayName: 'app',
         var outQ = this.state.outQueue;
         
         for(var i=0; i<inQ.length; i++)
+        {
             inQ[i].roll = Math.floor((Math.random() * 20) + 1);
+            inQ[i].total = parseInt(inQ[i].roll) + parseInt(inQ[i].mod);
+        }
         for(i=0; i<outQ.length; i++)
+        {
             outQ[i].roll = Math.floor((Math.random() * 20) + 1);
+            outQ[i].total = parseInt(outQ[i].roll) + parseInt(outQ[i].mod);
+        }            
             
         inQ.sort(compareInit);
         console.log(inQ);
@@ -729,17 +789,21 @@ var app = React.createClass({displayName: 'app',
                 e.preventDefault();
                 
                 var curFocus = this.state.focused;
-                if (++curFocus >= (this.state.inQueue.length * 2))
+                if (++curFocus >= (this.state.inQueue.length * 3))
                     curFocus = 0;
                 
                 var focusId;
-                switch(curFocus % 2) {
+                switch(curFocus % 3) {
                     case 0:
-                        focusId = "roll"+Math.floor(curFocus/2);
+                        focusId = "total"+Math.floor(curFocus/3);
                         break;
                     
                     case 1:
-                        focusId = "mod"+Math.floor(curFocus/2);
+                        focusId = "roll"+Math.floor(curFocus/3);
+                        break;
+                    
+                    case 2:
+                        focusId = "mod"+Math.floor(curFocus/3);
                         break;
                 }
                 document.getElementById(focusId).focus();
@@ -832,6 +896,7 @@ var app = React.createClass({displayName: 'app',
                              round:this.state.round,
                              onRollChange:this.handleRollChangeIn,
                              onModChange:this.handleModChangeIn,
+                             onTotalChange:this.handleTotalChangeIn,
                              onCharUp:this.handleCharUp,
                              onCharDown:this.handleCharDown,
                              onCharHold:this.handleCharHold,
@@ -845,6 +910,7 @@ var app = React.createClass({displayName: 'app',
                 outQueueCmpt( {charList:this.state.outQueue,
                               onRollChange:this.handleRollChangeOut,
                               onModChange:this.handleModChangeOut,
+                              onTotalChange:this.handleTotalChangeOut,
                               onCharPlay:this.handleCharPlay,
                               onCharDel:this.handleCharDelOut})
             )
